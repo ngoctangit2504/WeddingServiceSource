@@ -1,0 +1,13 @@
+- TECHNOLOGY IN PROJECT
+- ✅ Spring Boot 3.2.5
+- ✅ HTTP & API development
+- ✅ Developer tools for maximum productivity
+- ✅ Robust error handling techniques
+- ✅ Databases & MySql Server
+- ✅ Spring Data JPA
+- ✅ JavaScript and React for front-end development
+- ✅ Spring Security 6 for secure, authenticated applications
+- ✅ Login/Registration systems for user management
+- HƯỚNG DẪN CHẠY PROJECT
+- ✅ Build project: mvn clean install
+- ✅ Open Api Document: http://localhost:8080/swagger-ui/index.html
