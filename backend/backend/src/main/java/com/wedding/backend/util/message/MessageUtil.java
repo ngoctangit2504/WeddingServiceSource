@@ -37,4 +37,5 @@ public class MessageUtil {
     public static final String MSG_BALANCE_NOT_ENOUGH = "Hiện tại, Số dư của bạn không đủ để thực hiện giao dịch.";
     public static final String MSG_SERVICE_EXISTS = "Dịch vụ tồn tại!";
     public static final String SUPPLIER_NOT_FOUND = "Nhà cung cấp không tồn tại!";
+    public static final String MSG_SEND_BOOKING_SUCCESS = "Gửi báo giá thành công";
 }

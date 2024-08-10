@@ -38,7 +38,7 @@ public class BookingService implements IBookingService {
             Optional<ServiceEntity> service = serviceRepository.findById(bookingServiceDTO.getServiceId());
             service.ifPresent(booking::setServerBooking);
             bookingRepository.save(booking);
-            return new BaseResult(true, MessageUtil.MSG_ADD_SUCCESS);
+            return new BaseResult(true, MessageUtil.MSG_SEND_BOOKING_SUCCESS);
         } catch (Exception ex) {
             throw new ResourceNotFoundException(ex.getMessage());
         }
