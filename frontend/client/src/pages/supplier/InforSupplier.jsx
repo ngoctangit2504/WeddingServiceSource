@@ -18,12 +18,14 @@ import {
 } from "@/apis/app";
 import { apiAddInforSupplier, apiSupplierGetByUser } from "@/apis/supplier";
 import { toast } from "react-toastify";
+import { data } from "autoprefixer";
 
 const InforSupplier = ({ navigate }) => {
     const {
         formState: { errors },
         watch,
         register,
+        getValues,
         setValue,
         handleSubmit: validate,
     } = useForm();
@@ -34,6 +36,7 @@ const InforSupplier = ({ navigate }) => {
     const [center, setCenter] = useState(null);
     const [zoom, setZoom] = useState(10);
     const [isLoading, setIsLoading] = useState(false);
+    const [avtImgBase64, setAvtImgBase64] = useState(null)
 
     const province = watch("province");
     const district = watch("district");
@@ -51,6 +54,7 @@ const InforSupplier = ({ navigate }) => {
                     setValue("phoneNumberSupplier", response.data[0].phoneNumberSupplier);
                     setValue("emailSupplier", response.data[0].emailSupplier);
                     setValue("addressSupplier", response.data[0].addressSupplier);
+                    setAvtImgBase64(response.data[0].logo)
                     // set value for other fields if needed
                 }
             } catch (error) {
@@ -59,6 +63,34 @@ const InforSupplier = ({ navigate }) => {
         };
         fetchSupplierData();
     }, [setValue]);
+
+  //  Set avt
+    const convertImage = async (file) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setAvtImgBase64(reader.result);
+        };
+        reader.readAsDataURL(file);
+    };
+
+    useEffect(() => {
+        const files = getValues("avtImgBase64");
+        if (files instanceof FileList && files.length > 0) {
+            const file = files[0];
+            convertImage(file);
+        }
+    }, [watch("avtImgBase64")]);
+    // const convertImage = async (file) => {
+    //     const image64 = await getBase64(file)
+    //     setAvtImgBase64(image64)
+    //   }
+    //   useEffect(() => {
+    //     const files = getValues("avtImgBase64")
+    //     if (files instanceof FileList && files.length > 0) {
+    //       const file = files[0]
+    //       convertImage(file)
+    //     }
+    //   }, [watch("avtImgBase64")])
 
 
     // Lấy tọa độ từ địa chỉ
@@ -152,28 +184,79 @@ const InforSupplier = ({ navigate }) => {
     }, [province, district, ward, debounceValue, setValue]);
 
     // Xử lý gửi form
+    // const handleSubmitCreate = async (data) => {
+    //     const { name, phoneNumberSupplier, emailSupplier, addressSupplier } = data;
+    //     const payload = { name, phoneNumberSupplier, emailSupplier, addressSupplier };
+    //     const formData = new FormData()
+    //     formData.append("request", JSON.stringify(payload))
+    //     if (avtImgBase64 && avtImgBase64 instanceof FileList && avtImgBase64.length > 0) {
+    //         formData.append("supplierImage", avtImgBase64[0])
+    //     }
+    //     setIsLoading(true);
+    //     const response = await apiAddInforSupplier(formData);
+    //     setIsLoading(false);
+    //     if (response.success == true) {
+    //         toast.success("Tạo thông tin nhà cung cấp thành công");
+    //         // navigate("/" + path.SUPPLIER + "/" + path.INFORMATION_SUPPLIER);
+    //     } else {
+    //         toast.error(response.message);
+    //     }
+    // };
+    // const handleSubmitUpdate = async (data) => {
+
+    // }
     const handleSubmit = async (data) => {
         const { name, phoneNumberSupplier, emailSupplier, addressSupplier } = data;
         const payload = { name, phoneNumberSupplier, emailSupplier, addressSupplier };
-        const formData = new FormData()
-        formData.append("request", JSON.stringify(payload))
+
+        if (supplierData?.id) {
+            payload.id = supplierData.id; // Nếu có id, thêm vào payload để thực hiện cập nhật
+        }
+
+        const formData = new FormData();
+        formData.append("request", JSON.stringify(payload));
+
+
+        if (avtImgBase64 && avtImgBase64 instanceof FileList && avtImgBase64.length > 0) {
+            formData.append("supplierImage", avtImgBase64[0])
+        }
+
+
         setIsLoading(true);
-        const response = await apiAddInforSupplier(formData);
-        setIsLoading(false);
-        if (response.success == true) {
-            toast.success("Cập nhật thông tin nhà cung cấp thành công");
-           // navigate("/" + path.SUPPLIER + "/" + path.INFORMATION_SUPPLIER);
-        } else {
-            toast.error(response.message);
+        try {
+            const response = await apiAddInforSupplier(formData);
+
+            if (response.success) {
+                toast.success(supplierData?.id ? "Cập nhật thông tin nhà cung cấp thành công" : "Thêm mới nhà cung cấp thành công");
+                // Điều hướng sau khi cập nhật/thêm mới thành công nếu cần
+                // navigate("/" + path.SUPPLIER + "/" + path.INFORMATION_SUPPLIER);
+            } else {
+                toast.error(response.message || (supplierData?.id ? "Cập nhật thất bại" : "Thêm mới thất bại"));
+            }
+        } catch (error) {
+            console.error("Error submitting supplier information:", error);
+            toast.error("Đã xảy ra lỗi trong quá trình xử lý");
+        } finally {
+            setIsLoading(false);
         }
     };
+
 
     return (
         <section className="pb-[200px]">
             <Title title="Thông tin nhà cung cấp">
-                <Button onClick={validate(handleSubmit)} disabled={isLoading}>
-                    Cập nhật
-                </Button>
+                {
+                    supplierData ? (
+                        <Button onClick={validate(handleSubmit)} disabled={isLoading}>
+                            Cập nhật
+                        </Button>
+
+                    ) : (
+                        <Button onClick={validate(handleSubmit)} disabled={isLoading}>
+                            Thêm mới
+                        </Button>
+                    )
+                }
             </Title>
             <form className="p-4 grid grid-cols-12 gap-6">
                 <div className="col-span-8">
@@ -280,6 +363,22 @@ const InforSupplier = ({ navigate }) => {
                             readOnly={true}
                             validate={{ required: "Không được bỏ trống" }}
                         />
+                    </div>
+                    <div className="mt-6 flex flex-col gap-2">
+                        <label className="font-medium" htmlFor="avtImgBase64">
+                            Chọn ảnh đại diện nhà cung cấp
+                        </label>
+                        <label
+                            className="rounded-md px-4 py-2 flex items-center justify-center text-white bg-main-pink w-fit gap-2"
+                            htmlFor="avtImgBase64"
+                        >
+                            <img
+                                src={avtImgBase64 || "/user.svg"}
+                                alt="avtImg"
+                                className="w-24 h-24 object-cover border rounded-full"
+                            />
+                        </label>
+                        <input {...register("avtImgBase64")} hidden type="file" id="avtImgBase64" />
                     </div>
                 </div>
                 <div className="col-span-4 flex flex-col gap-4">

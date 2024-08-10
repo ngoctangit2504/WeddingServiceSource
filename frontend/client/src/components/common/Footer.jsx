@@ -37,10 +37,10 @@ const Footer = () => {
         <div className="col-span-1 py-6 flex flex-col gap-1">
           <h1 className="uppercase font-bold pb-2">Tính năng nổi bật</h1>
           <Link to={"/"} className="hover:underline">
-            Tìm kiếm phòng nhanh chóng
+            Tìm kiếm dịch vụ tiệc cưới nhanh chóng
           </Link>
           <Link to={"/"} className="hover:underline">
-            Quản lý phòng hiệu quả
+            Quản lý dịch vụ hiệu quả
           </Link>
         </div>
         <div className="col-span-1 py-6 flex flex-col gap-1">

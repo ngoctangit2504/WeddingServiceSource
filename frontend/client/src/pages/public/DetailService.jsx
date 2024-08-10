@@ -5,6 +5,8 @@ import { AiOutlineHeart, AiOutlineUnorderedList } from "react-icons/ai"
 import { GoLocation } from "react-icons/go"
 import { BsPhoneVibrate } from "react-icons/bs"
 import { createSearchParams, useParams } from "react-router-dom"
+import Swal from "sweetalert2"
+
 
 // import { apiGetDetailPost, apiGetPosts, apiGetRatings } from "@/apis/post"
 
@@ -35,6 +37,7 @@ import { MdOutlineReportProblem } from "react-icons/md"
 import { modal } from "@/redux/appSlice"
 import { Slide, toast } from "react-toastify"
 import { apiAddWishlist, apiRemoveWishlist } from "@/apis/user"
+import { apiCreateNewBooking } from "@/apis/service"
 import { getWishlist } from "@/redux/action"
 import { FaHeart, FaRegHeart } from "react-icons/fa"
 import { useForm } from "react-hook-form"
@@ -62,10 +65,6 @@ const DetailPost = ({ navigate, location, dispatch }) => {
     reset,
     watch,
   } = useForm()
-
-  const handleSendPriceQuote = async (data) => {
-
-  }
 
   const { current, wishlist } = useSelector((s) => s.user)
 
@@ -97,6 +96,34 @@ const DetailPost = ({ navigate, location, dispatch }) => {
   //   if (response) setPosts(response.data)
   //   else setPosts([])
   // }
+
+  const handleSendPriceQuote = async (data) => {
+    Swal.fire({
+      icon: "warning",
+      title: "Xác nhận thao tác",
+      text: "Bạn có chắc muốn gửi thông tin nhận báo giá dịch vụ này?",
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: "Gửi",
+      cancelButtonText: "Quay lại",
+    }).then(async (rs) => {
+      if (rs.isConfirmed) {
+        const requestBody = {
+          name: data.name,
+          email: data.email,
+          phoneNumber: data.phoneNumber,
+          notes: data.content,
+          serviceId: pid
+        }
+        // Delete here
+        const response = await apiCreateNewBooking(requestBody);
+        if (response.success) {
+          toast.success(response.message)
+          render()
+        } else toast.error("Có lỗi hãy thử lại sau")
+      }
+    })
+  };
 
   const fetchRating = async () => {
     const response = await apiGetRatings({ postId: pid })

@@ -19,9 +19,9 @@ const HistoriesPayment = () => {
   const [count, setCount] = useState(0)
   const fetchHistoriesPayment = async (params) => {
     const response = await apiGetTransationUser(params)
-    if (response.data) {
-      setTransactions(response.data)
-      setCount(response.count)
+    if (response.body.data) {
+      setTransactions(response.body.data)
+      setCount(response.body.count)
     }
   }
   useEffect(() => {
@@ -56,10 +56,6 @@ const HistoriesPayment = () => {
                 <th className="p-2 border font-medium text-center">
                   Ngày hết hạn
                 </th>
-
-                <th className="p-2 border font-medium text-center">
-                  Số ngày gia hạn
-                </th>
                 <th className="p-2 border font-medium text-center">
                   Trạng thái
                 </th>
@@ -84,10 +80,6 @@ const HistoriesPayment = () => {
 
                   <td className="p-2 text-center">
                     {moment(el.expirationDate).format("DD/MM/YYYY")}
-                  </td>
-
-                  <td className="p-2 text-center">
-                    {el.extensionDays + " ngày"}
                   </td>
 
                   <td className="p-2 text-center">

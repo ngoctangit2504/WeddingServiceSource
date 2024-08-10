@@ -14,7 +14,7 @@ export const apiGetDepositHistory = (params) =>
   })
 export const apiGetTransationUser = (params) =>
   axios({
-    url: "/user/transaction/service-package",
+    url: "/supplier/transaction/service-package",
     method: "get",
     params,
   })

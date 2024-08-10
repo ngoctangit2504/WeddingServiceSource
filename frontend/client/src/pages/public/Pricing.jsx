@@ -43,13 +43,16 @@ const PricingItem = ({
       }
     })
   }
+
+  // Đảm bảo giá trị boolean cho thuộc tính disabled
+  const isDisabled = current?.servicePackageUsed === name;
   return (
     <div className={clsx("col-span-1 h-full mb-[150px]")}>
       <h3
         className={clsx(
           "text-center p-4 border border-emerald-500 bg-emerald-700 text-white font-semibold rounded-t-md",
           current?.servicePackageUsed === name &&
-            "bg-orange-700 border-orange-700"
+          "bg-orange-700 border-orange-700"
         )}
       >
         {name}
@@ -194,7 +197,7 @@ const Pricing = () => {
       >
         Bảng Giá Dịch Vụ
       </h1>
-      <div className="mt-4 grid grid-cols-4 gap-4">
+      <div className="mt-4 grid grid-cols-3 gap-3">
         {pricings?.map((el) => (
           <PricingItem key={el.servicePackageId} {...el} />
         ))}

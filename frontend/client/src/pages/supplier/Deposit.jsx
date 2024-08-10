@@ -32,7 +32,6 @@ const Deposit = () => {
   const [title, setTitle] = useState()
   const [method, setMethod] = useState()
 
-  console.log("Come here")
 
   const {
     register,

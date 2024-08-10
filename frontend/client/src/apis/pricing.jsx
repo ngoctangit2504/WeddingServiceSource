@@ -25,7 +25,7 @@ export const apiDeletePricing = (id) =>
   })
 export const apiSubcribePricing = (params) =>
   axios({
-    url: "/user/service/purchasePackageByUser",
+    url: "/supplier/service/purchase-package-service",
     method: "post",
     params,
   })

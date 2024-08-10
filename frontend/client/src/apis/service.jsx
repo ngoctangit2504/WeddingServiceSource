@@ -6,6 +6,13 @@ export const apiGetServiceType = () =>
         method: "GET"
     })
 
+export const apiCreateNewBooking = (data) =>
+    axios({
+        url: "/booking-service/add",
+        method: "post",
+        data,
+    })
+
 export const apiGetServiceByDeleted = (params) =>
     axios({
         url: "/service/getAllByDeleted",
@@ -36,6 +43,14 @@ export const apiGetServices = (data) =>
 export const apiGetAlbumOfService = (params) => {
     return axios({
         url: "/guest/albByName",
+        method: "GET",
+        params
+    })
+}
+
+export const apiGetServiceByPackageVIP = (params) => {
+    return axios({
+        url: "/guest/service/services-by-package-vip",
         method: "GET",
         params
     })
