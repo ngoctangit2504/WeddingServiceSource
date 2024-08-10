@@ -8,6 +8,7 @@ import com.wedding.backend.dto.service.ServiceDTO;
 import com.wedding.backend.dto.service.ServiceDetail;
 import com.wedding.backend.dto.service.UpSertServiceDTO;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
@@ -29,4 +30,6 @@ public interface IService {
     BaseResult deleteByIds(Long[] serviceIds);
 
     BaseResult deleteById(Long serviceId);
+
+    BaseResultWithDataAndCount<?> getServiceByPackageVIP(Pageable pageable, Long packageId);
 }

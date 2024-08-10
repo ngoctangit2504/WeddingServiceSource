@@ -13,6 +13,16 @@ public class PhoneNumberValidator {
         return Pattern.matches(PHONE_NUMBER_PATTERN, phoneNumber);
     }
 
+
+    public static String  normalizeDisplayPhoneNumber(String phoneNumber){
+        // Loại bỏ tất cả dấu cách
+        phoneNumber = phoneNumber.replaceAll("\\s", "");
+        if(phoneNumber.startsWith("+84")){
+            phoneNumber = phoneNumber.replaceFirst("^\\+84", "0");
+        }
+        return phoneNumber;
+    }
+
     public static String normalizePhoneNumber(String phoneNumber) {
 
         // Remove all space

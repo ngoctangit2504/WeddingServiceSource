@@ -42,7 +42,7 @@ public class ServiceController {
     }
 
     @GetMapping("/detail-service")
-    public ResponseEntity<?> getDetailServiceById(@RequestParam Long serviceId) {
+    public ResponseEntity<?> getDetailServiceById(@RequestParam("serviceId") Long serviceId) {
         return ResponseEntity.ok(service.getDetailServiceById(serviceId));
     }
 

@@ -40,4 +40,8 @@ public class SupplierEntity extends BaseEntityWithIDIncrement {
 
     @OneToMany(mappedBy = "supplier")
     private List<ServiceEntity> services;
+
+    @OneToMany(mappedBy = "userTransaction")
+    @JsonManagedReference
+    private List<TransactionEntity> transactionEntities;
 }

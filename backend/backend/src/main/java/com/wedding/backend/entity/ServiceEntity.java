@@ -77,6 +77,10 @@ public class ServiceEntity extends BaseEntityWithIDIncrement {
     @JsonBackReference
     private List<ReportEntity> reports;
 
+    @OneToMany(mappedBy = "serverBooking")
+    @JsonBackReference
+    private List<BookingEntity> bookings;
+
     @OneToMany(mappedBy = "serviceRating")
     @JsonBackReference
     private List<RatingEntity> ratings;

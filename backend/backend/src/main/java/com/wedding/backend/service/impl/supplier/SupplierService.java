@@ -47,41 +47,64 @@ public class SupplierService implements ISupplierService {
         BaseResult result = new BaseResult();
         try {
             var userEntity = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
-            SupplierEntity supplier = new SupplierEntity();
-            // if phone number is exited => return false
-            if (request.getPhoneNumberSupplier() != null) {
-                var supplierFromDB = repository.findByPhoneNumberSupplier(request.getPhoneNumberSupplier());
+            SupplierEntity supplier;
+
+            // Kiểm tra xem có id trong request không
+            if (request.getId() != null) {
+                // Tìm nhà cung cấp trong DB theo id
+                var supplierFromDB = repository.findById(request.getId());
                 if (supplierFromDB.isPresent()) {
+                    supplier = supplierFromDB.get();
+                } else {
+                    result.setSuccess(false);
+                    result.setMessage(MessageUtil.SUPPLIER_NOT_FOUND);
+                    return result;
+                }
+            } else {
+                // Thêm mới nhà cung cấp
+                supplier = new SupplierEntity();
+                supplier.setUser(userEntity);
+                supplier.setCreatedBy(userEntity.getId());
+                supplier.setCreatedDate(new Date());
+            }
+
+            // Kiểm tra số điện thoại nếu có
+            if (request.getPhoneNumberSupplier() != null) {
+                var supplierWithPhone = repository.findByPhoneNumberSupplier(request.getPhoneNumberSupplier());
+                if (supplierWithPhone.isPresent() && !supplierWithPhone.get().getId().equals(request.getId())) {
                     result.setSuccess(false);
                     result.setMessage(MessageUtil.MSG_PHONE_NUMBER_IS_EXITED);
                     return result;
                 }
                 supplier.setPhoneNumberSupplier(request.getPhoneNumberSupplier());
             }
+
+            // Kiểm tra email nếu có
             if (request.getEmailSupplier() != null) {
-                var supplierFromDB = repository.findByEmailSupplier(request.getEmailSupplier());
-                if (supplierFromDB.isPresent()) {
+                var supplierWithEmail = repository.findByEmailSupplier(request.getEmailSupplier());
+                if (supplierWithEmail.isPresent() && !supplierWithEmail.get().getId().equals(request.getId())) {
                     result.setSuccess(false);
                     result.setMessage(MessageUtil.MSG_EMAIL_IS_EXITED);
                     return result;
                 }
                 supplier.setEmailSupplier(request.getEmailSupplier());
             }
+
             if (request.getName() != null) {
                 supplier.setName(request.getName());
             }
+
             if (request.getAddressSupplier() != null) {
                 supplier.setAddressSupplier(request.getAddressSupplier());
             }
+
             if (supplierImage != null) {
                 supplier.setLogo(fileHandler.getFileUrls(supplierImage));
             }
-            supplier.setUser(userEntity);
-            supplier.setCreatedBy(userEntity.getId());
-            supplier.setCreatedDate(new Date());
+
             SupplierEntity resultFromDb = repository.save(supplier);
             result.setSuccess(true);
-            result.setMessage(MessageUtil.MSG_ADD_SUCCESS);
+            result.setMessage(request.getId() != null ? MessageUtil.MSG_UPDATE_SUCCESS : MessageUtil.MSG_ADD_SUCCESS);
         } catch (Exception ex) {
             result.setSuccess(false);
             result.setMessage(ex.getMessage());
@@ -89,6 +112,7 @@ public class SupplierService implements ISupplierService {
         }
         return result;
     }
+
 
     @Override
     public BaseResultWithDataAndCount<List<SupplierDTO>> getSupplierByUser(Principal connectedUser) {

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wedding.backend.dto.supplier.SupplierDTO;
 import com.wedding.backend.dto.supplier.UpdateSupplierRequest;
+import com.wedding.backend.service.IService.service.ITransactionService;
 import com.wedding.backend.service.IService.supplier.ISupplierService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,9 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class SupplierController {
     private final ISupplierService service;
+
+    private final ITransactionService transactionService;
+
 
     @GetMapping("/getAll")
     public ResponseEntity<?> getAllSuppliers(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
@@ -64,8 +68,23 @@ public class SupplierController {
         return ResponseEntity.ok(service.addSupplier(supplierDTO, supplierImage, connectedUser));
     }
 
-    @GetMapping(value = "supplier-is-exit-by-userId")
+    @GetMapping(value = "/supplier-is-exit-by-userId")
     public ResponseEntity<?> supplierIsExitedByUserId(Principal connectedUser) {
         return ResponseEntity.ok(service.checkSupplierExitByUserId(connectedUser));
+    }
+
+    @PostMapping(value = "/service/purchase-package-service")
+    public ResponseEntity<?> purchasePackageByUser(@RequestParam(name = "servicePackageId") Long servicePackageId,
+                                                   Principal connectedUser) {
+        return transactionService.purchasePackageByUser(connectedUser, servicePackageId);
+    }
+
+    @GetMapping(value = "/transaction/service-package")
+    public ResponseEntity<?> transactionPackageServiceBySupplier(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+                                                                 @RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
+                                                                 Principal connectedUser) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        return ResponseEntity.ok(transactionService.getAllTransactionServiceByUser(connectedUser, pageable));
     }
 }

@@ -28,5 +28,6 @@ public class UserDTO {
     private String modifiedBy;
     private Date createdDate;
     private Date modifiedDate;
+    private String servicePackageUsed;
     private Set<RoleEntity> roles = new HashSet<>();
 }

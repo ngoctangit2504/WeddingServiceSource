@@ -15,6 +15,13 @@ group by s.id, s.title, s.address, s.created_date, s.price, s.image, wi.wishlist
 order by wi.wishlist_item_id desc;
 
   
+  
+-- Detail service
+	Select s.id, li.image_url_list as imagesURL, sa.name as nameAlb from services as s
+                    inner join service_albums as sa on s.id = sa.service_id
+                    inner join service_album_entity_image_url_list as li on sa.id = li.service_album_entity_id
+                    where s.id= 1 ;
+  
 ALTER TABLE `wedding_db`.`services`
     CHANGE COLUMN `id` `id` BIGINT NOT NULL AUTO_INCREMENT FIRST,
     CHANGE COLUMN `title` `title` VARCHAR(255) NOT NULL AFTER `id`,

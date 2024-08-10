@@ -35,7 +35,6 @@ public class MessageUtil {
     public static final String MSG_TRANSACTION_SERVICE_SUCCESS_WITHOUT_SMS = "Giao dich thanh toán dịch vụ thành công. Lỗi gửi SMS! ";
     public static final String MSG_TRANSACTION_EXTENSION_SERVICE_SUCCESS_WITHOUT_SMS = "Giao dich thanh toán gia hạn dịch vụ thành công. Lỗi gửi SMS! ";
     public static final String MSG_BALANCE_NOT_ENOUGH = "Hiện tại, Số dư của bạn không đủ để thực hiện giao dịch.";
-
-
-
+    public static final String MSG_SERVICE_EXISTS = "Dịch vụ tồn tại!";
+    public static final String SUPPLIER_NOT_FOUND = "Nhà cung cấp không tồn tại!";
 }

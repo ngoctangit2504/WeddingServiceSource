@@ -218,6 +218,18 @@ public class Service implements IService {
         }
     }
 
+    @Override
+    public BaseResultWithDataAndCount<?> getServiceByPackageVIP(Pageable pageable, Long packageId) {
+        BaseResultWithDataAndCount<List<ServiceByPackageDTO>> result = new BaseResultWithDataAndCount<>();
+        try {
+            List<ServiceByPackageDTO> dataFromDb = repository.serviceByPackageId(packageId, pageable);
+            result.set(dataFromDb, (long) dataFromDb.size());
+        } catch (Exception ex) {
+            throw new ResourceNotFoundException(ex.getMessage());
+        }
+        return result;
+    }
+
     public ImageAlbDTOConvert convertData(ImageAlbDTO dataConvert) {
         return ImageAlbDTOConvert.builder()
                 .imageURL(dataConvert.getImagesURL())
