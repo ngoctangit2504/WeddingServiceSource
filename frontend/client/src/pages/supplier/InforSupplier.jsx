@@ -19,6 +19,7 @@ import {
 import { apiAddInforSupplier, apiSupplierGetByUser } from "@/apis/supplier";
 import { toast } from "react-toastify";
 import { data } from "autoprefixer";
+import { json } from "react-router-dom";
 
 const InforSupplier = ({ navigate }) => {
     const {
@@ -36,7 +37,8 @@ const InforSupplier = ({ navigate }) => {
     const [center, setCenter] = useState(null);
     const [zoom, setZoom] = useState(10);
     const [isLoading, setIsLoading] = useState(false);
-    const [avtImgBase64, setAvtImgBase64] = useState(null)
+    const [avtImgFile, setAvtImgFile] = useState(null);
+
 
     const province = watch("province");
     const district = watch("district");
@@ -54,8 +56,9 @@ const InforSupplier = ({ navigate }) => {
                     setValue("phoneNumberSupplier", response.data[0].phoneNumberSupplier);
                     setValue("emailSupplier", response.data[0].emailSupplier);
                     setValue("addressSupplier", response.data[0].addressSupplier);
-                    setAvtImgBase64(response.data[0].logo)
-                    // set value for other fields if needed
+                    if (response.data[0].logo) {
+                        setAvtImgFile(response.data[0].logo);
+                    }
                 }
             } catch (error) {
                 toast.error("Lỗi khi lấy dữ liệu nhà cung cấp");
@@ -64,34 +67,17 @@ const InforSupplier = ({ navigate }) => {
         fetchSupplierData();
     }, [setValue]);
 
-  //  Set avt
-    const convertImage = async (file) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setAvtImgBase64(reader.result);
-        };
-        reader.readAsDataURL(file);
+    // Update the avatar image file
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setAvtImgFile(file);
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+        }
     };
 
-    useEffect(() => {
-        const files = getValues("avtImgBase64");
-        if (files instanceof FileList && files.length > 0) {
-            const file = files[0];
-            convertImage(file);
-        }
-    }, [watch("avtImgBase64")]);
-    // const convertImage = async (file) => {
-    //     const image64 = await getBase64(file)
-    //     setAvtImgBase64(image64)
-    //   }
-    //   useEffect(() => {
-    //     const files = getValues("avtImgBase64")
-    //     if (files instanceof FileList && files.length > 0) {
-    //       const file = files[0]
-    //       convertImage(file)
-    //     }
-    //   }, [watch("avtImgBase64")])
-
+   
 
     // Lấy tọa độ từ địa chỉ
     const fetLngLat = async (payload) => {
@@ -216,9 +202,8 @@ const InforSupplier = ({ navigate }) => {
         const formData = new FormData();
         formData.append("request", JSON.stringify(payload));
 
-
-        if (avtImgBase64 && avtImgBase64 instanceof FileList && avtImgBase64.length > 0) {
-            formData.append("supplierImage", avtImgBase64[0])
+        if (avtImgFile) {
+            formData.append("supplierImage", avtImgFile);
         }
 
 
@@ -373,12 +358,18 @@ const InforSupplier = ({ navigate }) => {
                             htmlFor="avtImgBase64"
                         >
                             <img
-                                src={avtImgBase64 || "/user.svg"}
+                                src={avtImgFile ? (avtImgFile instanceof File ? URL.createObjectURL(avtImgFile) : avtImgFile) : "/user.svg"}
                                 alt="avtImg"
                                 className="w-24 h-24 object-cover border rounded-full"
                             />
                         </label>
-                        <input {...register("avtImgBase64")} hidden type="file" id="avtImgBase64" />
+                        <input
+                            {...register("avtImgBase64")}
+                            hidden
+                            type="file"
+                            id="avtImgBase64"
+                            onChange={handleImageChange}
+                        />
                     </div>
                 </div>
                 <div className="col-span-4 flex flex-col gap-4">

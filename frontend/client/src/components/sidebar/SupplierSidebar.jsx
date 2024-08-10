@@ -32,12 +32,12 @@ const SupplierSidebar = ({ dispatch }) => {
         </small>
         <div className="mt-4 flex flex-col items-center justify-center gap-1">
           <img
-            src={current?.images || "/user.svg"}
+            src={current?.profileImage || "/user.svg"}
             alt="avatar"
             className="w-24 h-24 rounded-full object-cover"
           />
           <span className="text-main-red font-bold">{current?.userName}</span>
-          <span>{"Mã thành viên: #" + current?.userId}</span>
+          <span>{"Mã thành viên: #" + current?.customerId.slice(-5)}</span>
           <span>{`TK chính: ${formatMoney(+current?.balance)} VND`}</span>
         </div>
       </div>

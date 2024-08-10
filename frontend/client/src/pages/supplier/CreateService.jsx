@@ -43,7 +43,7 @@ const CreateService = ({ navigate }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [imagesBase64, setImagesBase64] = useState([])
     const [imageHover, setImageHover] = useState()
-    const [avtImgBase64, setAvtImgBase64] = useState(null)
+    const [avtImgFile, setAvtImgFile] = useState(null);
     const [rotation, setRotation] = useState("");
 
     const province = watch("province")
@@ -70,26 +70,22 @@ const CreateService = ({ navigate }) => {
         const base64 = await getBase64(file)
         if (base64) setImagesBase64((prev) => [...prev, base64])
     }
-    const convertImage = async (file) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setAvtImgBase64(reader.result);
-        };
-        reader.readAsDataURL(file);
-    };
     useEffect(() => {
         setImagesBase64([])
         if (images && images instanceof FileList)
             for (let file of images) convertFileToBase64(file)
     }, [images])
 
-    useEffect(() => {
-        const files = getValues("avtImgBase64");
-        if (files instanceof FileList && files.length > 0) {
-            const file = files[0];
-            convertImage(file);
+
+    // Update the avatar image file
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setAvtImgFile(file);
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
         }
-    }, [watch("avtImgBase64")]);
+    };
 
     const fetchPostTypes = async () => {
         const response = await apiGetServiceType()
@@ -219,8 +215,9 @@ const CreateService = ({ navigate }) => {
         if (images && images instanceof FileList) {
             for (let image of images) formData.append("albums", image)
         }
-        if (avtImgBase64 && avtImgBase64 instanceof FileList && avtImgBase64.length > 0) {
-            formData.append("images", avtImgBase64[0])
+
+        if (avtImgFile) {
+            formData.append("images", avtImgFile);
         }
         setIsLoading(true)
         const response = await apiCreateNewService(formData)
@@ -396,12 +393,18 @@ const CreateService = ({ navigate }) => {
                             htmlFor="avtImgBase64"
                         >
                             <img
-                                src={avtImgBase64 || "/user.svg"}
+                                src={avtImgFile ? (avtImgFile instanceof File ? URL.createObjectURL(avtImgFile) : avtImgFile) : "/user.svg"}
                                 alt="avtImg"
                                 className="w-24 h-24 object-cover border rounded-full"
                             />
                         </label>
-                        <input {...register("avtImgBase64")} hidden type="file" id="avtImgBase64" />
+                        <input
+                            {...register("avtImgBase64")}
+                            hidden
+                            type="file"
+                            id="avtImgBase64"
+                            onChange={handleImageChange}
+                        />
                     </div>
                     <div className="mt-6 flex flex-col gap-2">
                         <label className="font-medium" htmlFor="images">

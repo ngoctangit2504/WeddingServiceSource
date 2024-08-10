@@ -123,7 +123,7 @@ const Deposit = () => {
               Lịch sử nạp tiền <AiOutlineArrowRight />
             </Link>
             <Link
-              to={`/${path.MANAGER}/${path.HISTORIES_PAYMENT}`}
+              to={`/${path.SUPPLIER}/${path.HISTORIES_PAYMENT}`}
               className="text-sm text-white bg-gray-600 mt-2 w-full py-2 flex items-center gap-2 justify-center rounded-md"
             >
               Lịch sử thanh toán <AiOutlineArrowRight />
