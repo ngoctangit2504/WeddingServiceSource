@@ -1,7 +1,6 @@
 package com.wedding.backend.repository;
 
 import com.wedding.backend.common.StatusCommon;
-import com.wedding.backend.dto.service.ImageAlbDTO;
 import com.wedding.backend.dto.service.ServiceByPackageDTO;
 import com.wedding.backend.dto.service.ServiceDetail;
 import com.wedding.backend.entity.ServiceEntity;
