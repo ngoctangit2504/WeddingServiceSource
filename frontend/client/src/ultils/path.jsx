@@ -19,6 +19,15 @@ const path = {
     MANAGE_DEPOSIT: "quan-ly-nap-tien",
     MANAGE_SERVICE: "quan-ly-dich-vu",
     CREATE_SERVICE: "tao-moi-dich-vu",
-    PRICING: "bang-gia-goi"
+    PRICING: "bang-gia-goi",
+    SUPPLIER_DETAIL__SID__NAME: "chi-tiet-nha-cung-cap/:supplierId/:supplierName",
+
+    ADMIN: "admin",
+    DASHBOARD: "dashboard",
+    MANAGE_SERVICES_ALL: "quan-ly-tat-ca-tin-dang",
+    MANAGE_USER: "quan-ly-thanh-vien",
+    MANAGE_PRICING: "quan-ly-bang-gia-dich-vu",
+    CREATE_PRICING: "tao-moi-bang-gia-dich-vu",
+
 }
 export default path

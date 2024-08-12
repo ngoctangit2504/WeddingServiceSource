@@ -17,6 +17,7 @@ const PricingItem = ({
   price,
   durationDays,
   servicePackageId,
+  isDisabled
 }) => {
   const dispatch = useDispatch()
   const { current } = useSelector((s) => s.user)
@@ -45,7 +46,7 @@ const PricingItem = ({
   }
 
   // Đảm bảo giá trị boolean cho thuộc tính disabled
-  const isDisabled = current?.servicePackageUsed === name;
+  // const isDisabled = current?.servicePackageUsed === name;
   return (
     <div className={clsx("col-span-1 h-full mb-[150px]")}>
       <h3
@@ -88,6 +89,7 @@ const PricingItem = ({
             <Button
               onClick={handleSubcribe}
               className="bg-transparent text-emerald-700 border rounded-md border-emerald-700 py-2 w-full"
+              disabled={isDisabled}
             >
               Đăng ký
             </Button>
@@ -100,6 +102,8 @@ const PricingItem = ({
 
 const Pricing = () => {
   const [pricings, setPricings] = useState([])
+  const { current } = useSelector((s) => s.user)
+
   const fetchPricing = async () => {
     const response = await apiGetPricings({ page: 0, limit: 100 })
     if (response.data) setPricings(response.data)
@@ -199,7 +203,11 @@ const Pricing = () => {
       </h1>
       <div className="mt-4 grid grid-cols-3 gap-3">
         {pricings?.map((el) => (
-          <PricingItem key={el.servicePackageId} {...el} />
+          <PricingItem
+            key={el.servicePackageId}
+            {...el}
+            isDisabled={!!current?.servicePackageUsed && current?.servicePackageUsed !== el.name} // Disable nếu đã đăng ký một gói khác
+          />
         ))}
       </div>
     </div>

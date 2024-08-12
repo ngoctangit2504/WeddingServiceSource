@@ -108,10 +108,10 @@ export const adminSidebar = [
   },
   {
     id: 3,
-    name: "Quản lý tin đăng",
+    name: "Quản lý dịch vụ bài viết",
     icon: <BsPostcard size={20} />,
     type: "SINGLE",
-    path: `/${path.ADMIN}/${path.MANAGE_POST_ALL}`,
+    path: `/${path.ADMIN}/${path.MANAGE_SERVICES_ALL}`,
   },
   {
     id: 4,
@@ -122,7 +122,7 @@ export const adminSidebar = [
   },
   {
     id: 573238,
-    name: "Quản lý giá dịch vụ",
+    name: "Quản lý giá gói dịch vụ",
     path: `/${path.ADMIN}/${path.MANAGE_PRICING}`,
     icon: <RiPriceTag2Line size={20} />,
     type: "SINGLE",

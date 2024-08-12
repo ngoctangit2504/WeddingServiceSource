@@ -3,7 +3,7 @@ import { Button, InputForm } from ".."
 import { useForm } from "react-hook-form"
 import { modal } from "@/redux/appSlice"
 import WithBaseTopping from "@/hocs/WithBaseTopping"
-// import { apiAddReport } from "@/apis/report"
+import { apiAddReport } from "@/apis/report"
 import { toast } from "react-toastify"
 
 const Report = ({ dispatch, id }) => {
@@ -13,11 +13,11 @@ const Report = ({ dispatch, id }) => {
     handleSubmit,
   } = useForm()
   const handleSendReport = async (data) => {
-    // const response = await apiAddReport({ ...data, idOfPost: id })
-    // if (response.success) {
-    //   toast.success(response.message)
-    //   dispatch(modal({ isShowModal: false, modalContent: null }))
-    // } else toast.error(response.message)
+    const response = await apiAddReport({ ...data, idOfPost: id })
+    if (response.success) {
+      toast.success(response.message)
+      dispatch(modal({ isShowModal: false, modalContent: null }))
+    } else toast.error(response.message)
   }
   return (
     <div

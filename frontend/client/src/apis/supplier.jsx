@@ -1,4 +1,3 @@
-
 import axios from "@/axios";
 
 export const apiAddInforSupplier = (data) =>
@@ -24,3 +23,9 @@ export const apiCheckSupplierExited = () => {
         method: "GET"
     })
 }
+
+export const apiGetSupplierById = (id) =>
+    axios({
+        url: `guest/get/${id}`,
+        method: "GET",
+    })

@@ -41,7 +41,7 @@ const LongCard = ({
           {address?.split(",")[address?.split(",")?.length - 1]}
         </span>
         <Link
-          className="text-emerald-800 cursor-pointer hover:underline font-semibold line-clamp-2"
+          className="text-fuchsia-950 cursor-pointer hover:underline font-semibold line-clamp-2"
           to={`/${path.DETAIL_POST}/${id}/${formatVietnameseToString(title)}`}
         >
           {title}

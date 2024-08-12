@@ -9,6 +9,11 @@ import { useDispatch, useSelector } from "react-redux"
 import { Link, useParams } from "react-router-dom"
 import { toast } from "react-toastify"
 import { Button } from ".."
+import { modal } from "@/redux/appSlice"
+import { Booking } from ".."
+import { MdForwardToInbox  } from "react-icons/md"
+
+
 
 const Card = ({
   image,
@@ -73,8 +78,18 @@ const Card = ({
         <span className="text-sm text-gray-500">{address}</span>
         <div className="mt-3 flex justify-between items-center">
           <Button
+            onClick={() =>
+              dispatch(
+                modal({
+                  isShowModal: true,
+                  modalContent: <Booking id={id} />,
+                })
+              )
+            }
+            className="bg-pink-500"
           >
-            Nhận Báo Giá
+            <MdForwardToInbox size={22} />
+            Nhận báo giá
           </Button>
           <span className="text-gray-500 text-sm">
             {moment(createdDate).format("DD/MM/YYYY")}

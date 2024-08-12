@@ -13,11 +13,13 @@ import Swal from "sweetalert2"
 import { apiGetDetailService } from "@/apis/service"
 import { apiGetRatings } from "@/apis/rating"
 import { apiGetAlbumOfService } from "@/apis/service"
-
+import { formatVietnameseToString } from "@/ultils/fn"
+import { Link } from "react-router-dom"
 import moment from "moment"
 import DOMPurify from "dompurify"
 import { apiGetLngLatFromAddress } from "@/apis/app"
 import { CgSpinner } from "react-icons/cg"
+import { MdForwardToInbox } from "react-icons/md"
 import {
   BoxFilter,
   Button,
@@ -41,11 +43,14 @@ import { apiCreateNewBooking } from "@/apis/service"
 import { getWishlist } from "@/redux/action"
 import { FaHeart, FaRegHeart } from "react-icons/fa"
 import { useForm } from "react-hook-form"
+import { Booking } from "@/components"
+
 
 
 import { FaFacebookSquare } from 'react-icons/fa';
 import { AiOutlineGlobal } from 'react-icons/ai';
 import { RiStarFill } from 'react-icons/ri';
+
 
 const DetailPost = ({ navigate, location, dispatch }) => {
   const { pid } = useParams()
@@ -56,6 +61,7 @@ const DetailPost = ({ navigate, location, dispatch }) => {
   const [center, setCenter] = useState([])
   const [posts, setPosts] = useState([])
   const [albums, setAlbums] = useState([])
+  const SUPPLIER_DETAIL_PATH = `/${path.SUPPLIER_DETAIL__SID__NAME.replace(':supplierId', post?.supplierId).replace(':supplierName', formatVietnameseToString(post?.supplierName))}`;
 
 
   const {
@@ -115,7 +121,6 @@ const DetailPost = ({ navigate, location, dispatch }) => {
           notes: data.content,
           serviceId: pid
         }
-        // Delete here
         const response = await apiCreateNewBooking(requestBody);
         if (response.success) {
           toast.success(response.message)
@@ -172,6 +177,7 @@ const DetailPost = ({ navigate, location, dispatch }) => {
       dispatch(getWishlist())
     } else toast.error(response.message)
   }
+
   return (
     <div className="w-main mt-6 m-auto pb-[200px]">
       <div className="max-w-screen-xl mx-auto bg-white shadow-md rounded-lg overflow-hidden">
@@ -183,24 +189,19 @@ const DetailPost = ({ navigate, location, dispatch }) => {
               className="h-16 w-auto"
             />
             <div className="ml-4">
-              <h2 className="text-2xl font-bold">{post?.supplierName}</h2>
-              <p className="text-base text-gray-600">
-                Trung Tâm Hội nghị - Tiệc Cưới Grand Palace
-              </p>
+              <Link to={SUPPLIER_DETAIL_PATH} className="text-2xl font-bold">
+                {post?.supplierName}
+              </Link>
             </div>
           </div>
           <div className="mt-6">
             <div className="flex items-center">
               <GoLocation className="text-gray-400 mr-3" />
-              <p className="text-base text-gray-600">{post?.addressSupplier}</p>
+              <p className="text-base text-gray-600">{post?.phoneNumberSupplier}</p>
             </div>
 
             <div className="flex items-center mt-3 justify-between">
               <div className="flex items-center space-x-3">
-                <div className="flex items-center">
-                  <BsPhoneVibrate className="text-gray-400 mr-1" />
-                  <p className="text-base text-gray-600">{post?.phoneNumberService}</p>
-                </div>
                 <div className="flex items-center">
                   <AiOutlineGlobal className="text-gray-400 mr-1" />
                   <a
@@ -224,7 +225,18 @@ const DetailPost = ({ navigate, location, dispatch }) => {
                   </a>
                 </div>
               </div>
-              <Button>
+              <Button
+                onClick={() =>
+                  dispatch(
+                    modal({
+                      isShowModal: true,
+                      modalContent: <Booking id={pid} />,
+                    })
+                  )
+                }
+                className="bg-pink-500"
+              >
+                <MdForwardToInbox size={22} />
                 Nhận báo giá
               </Button>
             </div>

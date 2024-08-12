@@ -192,7 +192,6 @@ const CreateService = ({ navigate }) => {
             images,
             title,
             information,
-            phoneNumber,
             linkFacebook,
             linkWebsite,
             avtImgBase64,
@@ -202,7 +201,6 @@ const CreateService = ({ navigate }) => {
             title,
             information,
             address,
-            phoneNumber,
             linkWebsite,
             linkFacebook,
             rotation,
@@ -352,17 +350,6 @@ const CreateService = ({ navigate }) => {
                         />
                     </div>
                     <div className="mt-6 grid grid-cols-3 gap-4">
-                        <InputForm
-                            label="Số điện thoại"
-                            register={register}
-                            errors={errors}
-                            id="phoneNumber"
-                            validate={{ required: "Trường này không được bỏ trống." }}
-                            fullWidth
-                            inputClassName="border-gray-300"
-                            wrapClassanme="col-span-1"
-                            textColor="text-black"
-                        />
                         <InputForm
                             label="Link facebook"
                             register={register}

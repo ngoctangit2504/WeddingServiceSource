@@ -84,3 +84,26 @@ export const apiCreateNewService = (data) =>
         method: "post",
         data,
     })
+export const apiGetServiceBySupplierId = (supplierId, params) =>
+    axios({
+        url: `guest/service/${supplierId}`,
+        method: "GET",
+        params
+    })
+export const apiGetServiceTypeNameBySupplierId = (supplierId) =>
+    axios({
+        url: `guest/service-type-name/${supplierId}`,
+        method: "GET",
+    })
+export const apiUpdateApprovedService = (params) =>
+    axios({
+        url: "/admin/setIsApprovedService",
+        method: "patch",
+        params,
+    })
+export const apiUpdateRejectedService = (params) =>
+    axios({
+        url: "/admin/setIsRejectedService",
+        method: "patch",
+        params,
+    })

@@ -24,6 +24,14 @@ import ManageDeposit from "./pages/supplier/ManageDeposit"
 import ManageService from "./pages/supplier/ManageService"
 import CreateService from "./pages/supplier/CreateService"
 import Pricing from "./pages/public/Pricing"
+import SupplierDetail from "./pages/supplier/SupplierDetail"
+import Dashboard from "./pages/admin/Dashboard"
+import LayoutAdmin from "./pages/admin/LayoutAdmin"
+import ManageServices from "./pages/admin/ManageServices"
+import ManageUser from "./pages/admin/ManageUser"
+import ManagePricing from "./pages/admin/ManagePricing"
+import CreatePricing from "./pages/admin/CreatePricing"
+
 
 function App() {
   const { isLoading, isShowModal, modalContent } = useSelector(
@@ -58,6 +66,7 @@ function App() {
           <Route path={path.DETAIL_POST__PID__TITLE} element={<DetailService />} />
           <Route path={path.INVALID} element={<Home />} />
           <Route path={path.PRICING} element={<Pricing />} />
+          <Route path={path.SUPPLIER_DETAIL__SID__NAME} element={<SupplierDetail />} />
         </Route>
         <Route path={path.LOGIN} element={<Login />} />
         {/* Member routes */}
@@ -74,6 +83,16 @@ function App() {
           <Route path={path.MANAGE_SERVICE} element={<ManageService />} />
           <Route path={path.CREATE_SERVICE} element={<CreateService />} />
         </Route>
+
+        {/* Admin routes */}
+        <Route path={path.ADMIN} element={<LayoutAdmin />}>
+          <Route path={path.DASHBOARD} element={<Dashboard />} />
+          <Route path={path.MANAGE_SERVICES_ALL} element={<ManageServices />} />
+          <Route path={path.MANAGE_USER} element={<ManageUser />} />
+          <Route path={path.MANAGE_PRICING} element={<ManagePricing />} />
+          <Route path={path.CREATE_PRICING} element={<CreatePricing />} />
+        </Route>
+
         <Route path={path.PAYMENT_RESULT} element={<PaymentResult />} />
 
       </Routes>
