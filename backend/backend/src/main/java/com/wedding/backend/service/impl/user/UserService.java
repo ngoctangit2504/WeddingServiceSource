@@ -4,6 +4,7 @@ import com.cloudinary.Cloudinary;
 import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithData;
 import com.wedding.backend.base.BaseResultWithDataAndCount;
+import com.wedding.backend.common.ModelCommon;
 import com.wedding.backend.dto.auth.LoginResponse;
 import com.wedding.backend.dto.auth.OTPRequestDto;
 import com.wedding.backend.dto.auth.OTPValidationRequestDto;
@@ -36,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -144,6 +146,82 @@ public class UserService implements IUserService {
             ResponseSendOTP result = twilioOTPService.sendSMS(requestDto);
             response = new ResponseEntity<>(result, HttpStatus.OK);
 
+        } catch (Exception ex) {
+            response = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_SYSTEM_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return response;
+    }
+
+    @Override
+    public ResponseEntity<?> findAllByIsDeletedIsFalse(Pageable pageable) {
+        ResponseEntity<?> response = null;
+        BaseResultWithDataAndCount<List<UserDTO>> resultWithDataAndCount = new BaseResultWithDataAndCount<>();
+        try {
+            RoleEntity roleAdmin = roleRepository.findByName(ModelCommon.ADMIN);
+            List<UserDTO> userDtoList = userRepository.findAllByIsDeletedFalse(pageable)
+                    .stream()
+                    .map(userEntity -> userMapper.entityToDto(userEntity))
+                    .filter(userDto -> !userDto.getRoles().contains(roleAdmin))
+                    .collect(Collectors.toList());
+            Long count = userRepository.countAllByIsDeletedFalse();
+            resultWithDataAndCount.set(userDtoList, count);
+            response = new ResponseEntity<>(resultWithDataAndCount, HttpStatus.OK);
+        } catch (Exception ex) {
+            response = new ResponseEntity<>(MessageUtil.MSG_SYSTEM_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return response;
+    }
+
+    @Override
+    public ResponseEntity<?> findAllByIsDeletedIsTrue(Pageable pageable) {
+        ResponseEntity<?> response = null;
+        BaseResultWithDataAndCount<List<UserDTO>> resultWithDataAndCount = new BaseResultWithDataAndCount<>();
+        try {
+            List<UserDTO> userDtoList = userRepository.findAllByIsDeletedTrue(pageable)
+                    .stream()
+                    .map(userEntity -> userMapper.entityToDto(userEntity))
+                    .collect(Collectors.toList());
+            Long count = userRepository.countAllByIsDeletedTrue();
+            resultWithDataAndCount.set(userDtoList, count);
+            response = new ResponseEntity<>(resultWithDataAndCount, HttpStatus.OK);
+        } catch (Exception ex) {
+            response = new ResponseEntity<>(MessageUtil.MSG_SYSTEM_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return response;
+    }
+
+    @Override
+    public ResponseEntity<?> findAllAccountByRoleName(Pageable pageable, String roleName) {
+        ResponseEntity<?> response = null;
+        BaseResultWithDataAndCount<List<UserDTO>> resultWithDataAndCount = new BaseResultWithDataAndCount<>();
+        try {
+            RoleEntity roleAdmin = roleRepository.findByName(ModelCommon.ADMIN);
+            List<UserDTO> userDtos = userRepository.findAllByRoles_NameAndIsDeletedFalse(roleName)
+                    .stream()
+                    .map(userEntity -> userMapper.entityToDto(userEntity))
+                    .filter(userDto -> !userDto.getRoles().contains(roleAdmin))
+                    .collect(Collectors.toList());
+            Long count = userRepository.countByRoles_NameAndIsDeletedFalse(roleName);
+            resultWithDataAndCount.set(userDtos, count);
+            response = new ResponseEntity<>(resultWithDataAndCount, HttpStatus.OK);
+        } catch (Exception ex) {
+            response = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_SYSTEM_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return response;
+    }
+
+    @Override
+    public ResponseEntity<?> deleteUserByIds(String[] listId) {
+        ResponseEntity<?> response = null;
+        long count = 0L;
+        try {
+            for (String item : listId
+            ) {
+                Optional<UserEntity> user = userRepository.findById(item);
+                user.ifPresent(userEntity -> userEntity.setDeleted(true));
+                count++;
+            }
+            response = new ResponseEntity<>(new BaseResult(true, MessageUtil.MSG_DELETE_SUCCESS + " " + count + " tài khoản."), HttpStatus.OK);
         } catch (Exception ex) {
             response = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_SYSTEM_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
         }

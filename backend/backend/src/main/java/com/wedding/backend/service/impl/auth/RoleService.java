@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -48,6 +49,18 @@ public class RoleService implements IRoleService {
                     .message(ex.getMessage())
                     .build();
             response = new ResponseEntity<>(baseResult, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return response;
+    }
+
+    @Override
+    public ResponseEntity<?> getAll() {
+        ResponseEntity<?> response = null;
+        try {
+            List<RoleEntity> list = roleRepository.findAll();
+            response = new ResponseEntity<>(list, HttpStatus.OK);
+        } catch (Exception ex) {
+            response = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_SYSTEM_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return response;
     }

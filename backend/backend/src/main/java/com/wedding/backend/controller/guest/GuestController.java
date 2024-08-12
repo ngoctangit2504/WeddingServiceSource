@@ -2,12 +2,16 @@ package com.wedding.backend.controller.guest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wedding.backend.dto.report.ReportDto;
 import com.wedding.backend.entity.SupplierEntity;
 import com.wedding.backend.entity.UserEntity;
 import com.wedding.backend.repository.SupplierRepository;
+import com.wedding.backend.service.IService.report.IReportService;
 import com.wedding.backend.service.IService.service.IDatabaseSearch;
 import com.wedding.backend.service.IService.service.IService;
 import com.wedding.backend.service.IService.service.IServicePackage;
+import com.wedding.backend.service.IService.service.IServiceType;
+import com.wedding.backend.service.IService.supplier.ISupplierService;
 import com.wedding.backend.util.extensions.ConvertStringToArrayExtension;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +39,12 @@ public class GuestController {
 
     private final IServicePackage servicePackage;
 
+    private final IReportService reportService;
+
+    private final ISupplierService supplierService;
+
+    private final IServiceType serviceType;
+
 
     @PostMapping(value = "/service/filters", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> searchPost(@RequestPart(required = false, name = "json") String json,
@@ -48,9 +58,8 @@ public class GuestController {
         if (json != null) {
             try {
                 map = objectMapper.readValue(json, LinkedHashMap.class);
-                for (var item : map.entrySet()
-                ) {
-                    if (item.getKey().equals("supplier_id")) {
+                for (var item : map.entrySet()) {
+                    if ("supplier_id".equals(item.getKey()) && item.getValue() == null) {
                         if (connectedUser != null) {
                             var user = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
                             Optional<SupplierEntity> supplier = supplierRepository.findByUser_Id(user.getId());
@@ -58,10 +67,11 @@ public class GuestController {
                                 map.replace("supplier_id", supplier.get().getId());
                             }
                         } else {
-                            map.remove("supplierId");
+                            map.remove("supplier_id");
                         }
                     }
                 }
+
                 ConvertStringToArrayExtension.convertStringToArray(map);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
@@ -91,4 +101,30 @@ public class GuestController {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(service.getServiceByPackageVIP(pageable, packageId));
     }
+
+    @PostMapping(value = "/report/add")
+    public ResponseEntity<?> addReport(@RequestBody ReportDto reportDto) {
+        return ResponseEntity.ok(reportService.addReport(reportDto));
+    }
+
+    @GetMapping("/get/{supplierId}")
+    public ResponseEntity<?> getSupplier(@PathVariable(name = "supplierId") Long supplierId) {
+        return ResponseEntity.ok(supplierService.getSupplier(supplierId));
+    }
+
+    @GetMapping("/service/{supplierId}")
+    public ResponseEntity<?> getServiceBySupplierId(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+                                                    @RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
+                                                    @PathVariable(name = "supplierId") Long supplierId) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(service.getServiceBySupplierId(supplierId, pageable));
+    }
+
+    @GetMapping("/service-type-name/{supplierId}")
+    public ResponseEntity<?> serviceTypeNameBySupplier(@PathVariable(name = "supplierId") Long supplierId) {
+        return ResponseEntity.ok(serviceType.serviceTypeNameBySupplier(supplierId));
+    }
+
+
+
 }

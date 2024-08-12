@@ -33,6 +33,9 @@ public class SupplierEntity extends BaseEntityWithIDIncrement {
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
+    @Column(name = "follower")
+    private Integer follower;
+
     @JsonManagedReference
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

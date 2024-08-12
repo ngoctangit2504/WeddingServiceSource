@@ -1,9 +1,6 @@
 package com.wedding.backend.repository;
 
-import com.wedding.backend.dto.service.ImageAlbDTO;
-import com.wedding.backend.dto.service.ServiceByPackageDTO;
-import com.wedding.backend.dto.service.ServiceDTO;
-import com.wedding.backend.dto.service.ServiceDetail;
+import com.wedding.backend.dto.service.*;
 import com.wedding.backend.entity.ServiceEntity;
 import com.wedding.backend.entity.ServiceTypeEntity;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +18,7 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
     List<ServiceEntity> findAllByServiceTypeAndIsDeletedFalse(ServiceTypeEntity serviceType, Pageable pageable);
 
     @Query(
-            value = "SELECT sv.id as serviceId, sv.title, sv.address as addressService, sv.image, sv.information, sv.link_facebook as linkFacebook, sv.link_website as linkWebsite, sv.phone_number as phoneNumberService, sv.rotation,\n" +
+            value = "SELECT sv.id as serviceId, sv.title, sv.address as addressService, sv.image, sv.information, sv.link_facebook as linkFacebook, sv.link_website as linkWebsite, sv.rotation, s.phone_number_supplier as phoneNumberSupplier,\n" +
                     "s.id as supplierId, s.name as supplierName, s.address_supplier as addressSupplier, s.logo, st.name as serviceTypeName\n" +
                     "FROM wedding_db.services as sv\n" +
                     "inner join supplier as s on sv.supplier_id = s.id\n" +
@@ -31,7 +28,8 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
     ServiceDetail serviceDetailById(@Param("serviceId") Long serviceId);
 
 
-    List<ServiceEntity> findAllBySupplier_Id(Pageable pageable, Long supplierId );
+    List<ServiceEntity> findAllBySupplier_IdAndIsDeletedFalse(Pageable pageable, Long supplierId );
+
 
     @Query(
             value = "Select s.id, li.image_url_list as imagesURL, sa.name as nameAlb from services as s\n" +
@@ -64,4 +62,5 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
                 "ORDER BY supplierId, purchaseDate DESC", nativeQuery = true
     )
     List<ServiceByPackageDTO> serviceByPackageId(@Param("packageId") Long packageId, Pageable pageable);
+
 }

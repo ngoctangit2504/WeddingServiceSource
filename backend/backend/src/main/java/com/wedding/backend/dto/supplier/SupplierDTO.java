@@ -18,4 +18,5 @@ public class SupplierDTO {
     private String phoneNumberSupplier;
     private String emailSupplier;
     private String addressSupplier;
+    private Integer follower;
 }

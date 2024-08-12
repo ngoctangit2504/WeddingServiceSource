@@ -35,9 +35,6 @@ public class ServiceEntity extends BaseEntityWithIDIncrement {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "phone_number")
-    private String phoneNumber;
-
     @Column(name = "link_website")
     private String linkWebsite;
 

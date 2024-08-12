@@ -15,7 +15,6 @@ public class UpSertServiceDTO {
     private String information;
     private String image;
     private String address;
-    private String phoneNumber;
     private String linkWebsite;
     private String linkFacebook;
     private String rotation;

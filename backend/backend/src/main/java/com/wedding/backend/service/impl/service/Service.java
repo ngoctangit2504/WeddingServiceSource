@@ -110,7 +110,7 @@ public class Service implements IService {
             var user = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
             Optional<SupplierEntity> supplier = supplierRepository.findByUser_Id(user.getId());
             if (supplier.isPresent()) {
-                List<ServiceDTO> resultFromDB = repository.findAllBySupplier_Id(pageable, supplier.get().getId())
+                List<ServiceDTO> resultFromDB = repository.findAllBySupplier_IdAndIsDeletedFalse(pageable, supplier.get().getId())
                         .stream()
                         .map(mapper::entityToDto)
                         .toList();
@@ -149,7 +149,6 @@ public class Service implements IService {
             service.setTitle(serviceDTO.getTitle());
             service.setInformation(serviceDTO.getInformation());
             service.setAddress(serviceDTO.getAddress());
-            service.setPhoneNumber(serviceDTO.getPhoneNumber());
             service.setLinkWebsite(serviceDTO.getLinkWebsite());
             service.setLinkFacebook(serviceDTO.getLinkFacebook());
             service.setRotation(serviceDTO.getRotation());
@@ -228,6 +227,55 @@ public class Service implements IService {
             throw new ResourceNotFoundException(ex.getMessage());
         }
         return result;
+    }
+
+    @Override
+    public BaseResultWithDataAndCount<List<ServiceDTO>> getServiceBySupplierId(Long supplierId, Pageable pageable) {
+        BaseResultWithDataAndCount<List<ServiceDTO>> result = new BaseResultWithDataAndCount<>();
+        try {
+            List<ServiceDTO> resultFromDB = repository.findAllBySupplier_IdAndIsDeletedFalse(pageable, supplierId)
+                    .stream()
+                    .map(mapper::entityToDto)
+                    .filter(serviceDTO -> serviceDTO.getStatus().equals("APPROVED"))
+                    .toList();
+            result.set(resultFromDB, (long) resultFromDB.size());
+
+        } catch (Exception ex) {
+            throw new ResourceNotFoundException(ex.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public BaseResult setIsApprovedPosts(Long[] listServiceId) {
+        try {
+            for (Long id : listServiceId) {
+                Optional<ServiceEntity> dataFromDb = repository.findById(id);
+                if (dataFromDb.isPresent()) {
+                    dataFromDb.get().setStatus(StatusCommon.APPROVED);
+                    repository.save(dataFromDb.get());
+                }
+            }
+        } catch (Exception ex) {
+            return new BaseResult(false, ex.getMessage());
+        }
+        return new BaseResult(true, MessageUtil.UPDATE_STATUS_SERVICE_SUCCESS);
+    }
+
+    @Override
+    public BaseResult setIsRejectedPosts(Long[] listServiceId) {
+        try {
+            for (Long id : listServiceId) {
+                Optional<ServiceEntity> dataFromDb = repository.findById(id);
+                if (dataFromDb.isPresent()) {
+                    dataFromDb.get().setStatus(StatusCommon.REJECTED);
+                    repository.save(dataFromDb.get());
+                }
+            }
+        } catch (Exception ex) {
+            return new BaseResult(false, ex.getMessage());
+        }
+        return new BaseResult(true, MessageUtil.UPDATE_STATUS_SERVICE_SUCCESS);
     }
 
     public ImageAlbDTOConvert convertData(ImageAlbDTO dataConvert) {

@@ -5,4 +5,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface IRoleService {
     ResponseEntity<?> addRole(RoleDTO request);
+    ResponseEntity<?> getAll();
+
 }

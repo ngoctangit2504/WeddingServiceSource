@@ -53,6 +53,7 @@ public class ServiceController {
         return ResponseEntity.ok(service.getServiceBySupplier(pageable, connectedUser));
     }
 
+
     @PostMapping(value = "/update-insert",
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
                     MediaType.APPLICATION_OCTET_STREAM_VALUE,

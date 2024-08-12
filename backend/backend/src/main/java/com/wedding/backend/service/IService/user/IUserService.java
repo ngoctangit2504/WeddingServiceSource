@@ -31,4 +31,13 @@ public interface IUserService {
     BaseResult updateProfile(UpdateProfileRequest profile, MultipartFile images, Principal connectedUser) throws IOException;
 
     ResponseEntity<?> sendOTP(OTPRequestDto requestDto);
+
+    ResponseEntity<?> findAllByIsDeletedIsFalse(Pageable pageable);
+
+    ResponseEntity<?> findAllByIsDeletedIsTrue(Pageable pageable);
+
+    ResponseEntity<?> findAllAccountByRoleName(Pageable pageable, String roleName);
+
+    ResponseEntity<?> deleteUserByIds(String[] listId);
+
 }

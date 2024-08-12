@@ -26,5 +26,5 @@ public class ServicePackageDto {
 
     private Date modifiedDate;
 
-    private Long modifiedBy;
+    private String modifiedBy;
 }

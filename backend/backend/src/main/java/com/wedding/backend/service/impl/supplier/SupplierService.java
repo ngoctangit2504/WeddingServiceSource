@@ -34,7 +34,18 @@ public class SupplierService implements ISupplierService {
 
     @Override
     public BaseResultWithData<SupplierDTO> getSupplier(Long supplierId) {
-        return null;
+        BaseResultWithData<SupplierDTO> result = new BaseResultWithData<>();
+        try {
+            Optional<SupplierEntity> supplier = repository.findById(supplierId);
+            if (supplier.isPresent()) {
+                result.Set(true, MessageUtil.MSG_SUCCESS, supplierMapper.entityToDto(supplier.get()));
+            }else {
+                result.Set(false, MessageUtil.SUPPLIER_NOT_FOUND, null);
+            }
+        } catch (Exception ex) {
+            throw new ResourceNotFoundException(ex.getMessage());
+        }
+        return result;
     }
 
     @Override

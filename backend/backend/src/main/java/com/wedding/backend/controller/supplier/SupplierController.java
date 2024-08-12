@@ -37,10 +37,7 @@ public class SupplierController {
     }
 
 
-    @GetMapping("/get/{supplierId}")
-    public ResponseEntity<?> getSupplier(@PathVariable Long supplierId) {
-        return ResponseEntity.ok(service.getSupplier(supplierId));
-    }
+
 
     @GetMapping("/getByUser")
     public ResponseEntity<?> getSupplierByUser(Principal connectedUser) {

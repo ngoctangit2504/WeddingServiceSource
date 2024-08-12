@@ -7,8 +7,8 @@ import com.wedding.backend.dto.service.ImageAlbDTOConvert;
 import com.wedding.backend.dto.service.ServiceDTO;
 import com.wedding.backend.dto.service.ServiceDetail;
 import com.wedding.backend.dto.service.UpSertServiceDTO;
+import com.wedding.backend.service.impl.service.Service;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
@@ -32,4 +32,10 @@ public interface IService {
     BaseResult deleteById(Long serviceId);
 
     BaseResultWithDataAndCount<?> getServiceByPackageVIP(Pageable pageable, Long packageId);
+
+    BaseResultWithDataAndCount<List<ServiceDTO>> getServiceBySupplierId(Long supplierId, Pageable pageable);
+
+    BaseResult setIsApprovedPosts(Long[] listServiceId);
+
+    BaseResult setIsRejectedPosts(Long[] listServiceId);
 }
