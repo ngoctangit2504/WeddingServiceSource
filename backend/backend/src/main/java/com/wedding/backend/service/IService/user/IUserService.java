@@ -40,4 +40,6 @@ public interface IUserService {
 
     ResponseEntity<?> deleteUserByIds(String[] listId);
 
+    ResponseEntity<?> getUserAccountStatus();
+
 }

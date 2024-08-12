@@ -11,6 +11,7 @@ import com.wedding.backend.dto.auth.OTPValidationRequestDto;
 import com.wedding.backend.dto.auth.ResponseSendOTP;
 import com.wedding.backend.dto.user.UpdateProfileRequest;
 import com.wedding.backend.dto.user.UserDTO;
+import com.wedding.backend.dto.user.UserStatus;
 import com.wedding.backend.entity.RoleEntity;
 import com.wedding.backend.entity.UserEntity;
 import com.wedding.backend.exception.ResourceNotFoundException;
@@ -226,6 +227,41 @@ public class UserService implements IUserService {
             response = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_SYSTEM_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return response;
+    }
+
+    @Override
+    public ResponseEntity<?> getUserAccountStatus() {
+        try {
+            RoleEntity role = roleRepository.findByName(ModelCommon.ADMIN);
+            List<UserEntity> allUsers = userRepository.findAllByRolesNotContainingAndIsDeletedFalse(role);
+            Long totalRoles = allUsers.stream()
+                    .flatMap(user -> user.getRoles().stream())
+                    .distinct()
+                    .count();
+
+            if (totalRoles == 0) {
+                UserStatus userStatus = new UserStatus(0L, 0L, 0L, 0L, 0L);
+                return ResponseEntity.ok(userStatus);
+            }
+
+            Map<String, Long> roleCounts = allUsers.stream()
+                    .flatMap(user -> user.getRoles().stream())
+                    .collect(Collectors.groupingBy(RoleEntity::getName, Collectors.counting()));
+
+            Long totalUsers = (long) allUsers.size();
+
+            Long percentUser = roleCounts.getOrDefault(ModelCommon.CUSTOMER, 0L) * 100 / totalUsers;
+            Long percentManage = roleCounts.getOrDefault(ModelCommon.MANAGE, 0L) * 100 / totalUsers;
+
+            UserStatus userStatus = new UserStatus(
+                    totalUsers, percentUser, roleCounts.getOrDefault(ModelCommon.CUSTOMER, 0L),
+                    percentManage, roleCounts.getOrDefault(ModelCommon.MANAGE, 0L)
+            );
+            return ResponseEntity.ok(userStatus);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new BaseResult(false, MessageUtil.MSG_SYSTEM_ERROR));
+        }
     }
 
     @Override

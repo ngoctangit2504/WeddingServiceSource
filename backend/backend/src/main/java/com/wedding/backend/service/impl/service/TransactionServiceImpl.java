@@ -237,22 +237,22 @@ public class TransactionServiceImpl implements ITransactionService {
         }
         return response;
     }
-//
-//    @Override
-//    public ResponseEntity<?> getAllTransactionService(Pageable pageable) {
-//        ResponseEntity<?> response = null;
-//        BaseResultWithDataAndCount<List<TransactionDto>> baseResultWithDataAndCount = new BaseResultWithDataAndCount<>();
-//        try {
-//            List<TransactionDto> transactionDtos = transactionRepository.findAllByOrderByPurchaseDateDesc(pageable)
-//                    .stream()
-//                    .map(transaction -> transactionMapper.entityToDto(transaction))
-//                    .collect(Collectors.toList());
-//            Long count = transactionRepository.count();
-//            baseResultWithDataAndCount.set(transactionDtos, count);
-//            response = new ResponseEntity<>(baseResultWithDataAndCount, HttpStatus.OK);
-//        } catch (Exception ex) {
-//            response = new ResponseEntity<>(BaseResponse.error(MessageUtil.MSG_SYSTEM_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//        return response;
-//    }
+
+    @Override
+    public ResponseEntity<?> getAllTransactionService(Pageable pageable) {
+        ResponseEntity<?> response = null;
+        BaseResultWithDataAndCount<List<TransactionDto>> baseResultWithDataAndCount = new BaseResultWithDataAndCount<>();
+        try {
+            List<TransactionDto> transactionDtos = transactionRepository.findAllByOrderByPurchaseDateDesc(pageable)
+                    .stream()
+                    .map(transaction -> transactionMapper.entityToDto(transaction))
+                    .collect(Collectors.toList());
+            Long count = transactionRepository.count();
+            baseResultWithDataAndCount.set(transactionDtos, count);
+            response = new ResponseEntity<>(baseResultWithDataAndCount, HttpStatus.OK);
+        } catch (Exception ex) {
+            response = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_SYSTEM_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return response;
+    }
 }

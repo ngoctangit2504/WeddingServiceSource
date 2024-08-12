@@ -41,4 +41,5 @@ public class MessageUtil {
     public static final String ADD_REPORT_SUCCESS = "Cam on thong tin bao cao dich vu cua ban";
     public static final String MSG_SUCCESS = "Success";
     public static final String UPDATE_STATUS_SERVICE_SUCCESS = "Cap nhat trang thai dich vu thanh cong!";
+    public static final String MSG_ID_FORMAT_INVALID = "Mã sai định dạng !";
 }

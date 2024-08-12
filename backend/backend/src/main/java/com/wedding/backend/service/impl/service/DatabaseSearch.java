@@ -26,7 +26,7 @@ public class DatabaseSearch implements IDatabaseSearch {
     public BaseResultWithDataAndCount<List<ServiceDTO>> searchFilter(Pageable pageable, LinkedHashMap<String, Object> map) throws SQLException {
         String url = "jdbc:mysql://localhost:3306/wedding_db";
         String username = "root";
-        String password = "huuthang";
+        String password = "tan686868";
         String tableName = "services";
         String tableJoin = "supplier";
 

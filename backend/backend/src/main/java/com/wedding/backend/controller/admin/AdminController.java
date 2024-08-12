@@ -3,8 +3,11 @@ package com.wedding.backend.controller.admin;
 import com.wedding.backend.dto.auth.RoleDTO;
 import com.wedding.backend.dto.servicePackage.ServicePackageDto;
 import com.wedding.backend.service.IService.auth.IRoleService;
+import com.wedding.backend.service.IService.payment.IPaymentService;
+import com.wedding.backend.service.IService.report.IReportService;
 import com.wedding.backend.service.IService.service.IService;
 import com.wedding.backend.service.IService.service.IServicePackage;
+import com.wedding.backend.service.IService.service.ITransactionService;
 import com.wedding.backend.service.IService.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +30,35 @@ public class AdminController {
 
     private final IRoleService roleService;
 
+    private final ITransactionService transactionService;
+
+    private final IReportService reportService;
+
+    private final IPaymentService paymentService;
+
+
+    //TODO: Dashboard
+    @GetMapping(value = "transaction/status")
+    public ResponseEntity<?> getTotalPaymentServiceByMonth() {
+        return service.getTotalPaymentServiceByMonth();
+    }
+
+    @GetMapping(value = "payment/status")
+    public ResponseEntity<?> getTotalPaymentTransactionByMonth() {
+        return paymentService.getTotalPaymentTransactionByMonth();
+    }
+
+    @GetMapping(value = "user/status")
+    public ResponseEntity<?> getUserAccountStatus(){
+        return userService.getUserAccountStatus();
+    }
+
+    @GetMapping(value = "post/status")
+    public ResponseEntity<?> getStatusPost() {
+        return service.getStatusService();
+    }
+
+
     //TODO: CRUD service package
     @PostMapping(value = "/service/add-service-package")
     public ResponseEntity<?> addServicePackage(@RequestBody ServicePackageDto request) {
@@ -42,6 +74,14 @@ public class AdminController {
     @DeleteMapping(value = "/service/delete-service-package/{id}")
     public ResponseEntity<?> deleteServicePackage(@PathVariable(name = "id") Long id) {
         return servicePackageService.removeServicePackageById(id);
+    }
+
+    //TODO: Transaction service package by user
+    @GetMapping("transaction/service-package")
+    public ResponseEntity<?> getAllTransactionServicePackage(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+                                                             @RequestParam(name = "size", required = false, defaultValue = "5") Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return transactionService.getAllTransactionService(pageable);
     }
 
     //TODO: CRUD Post
@@ -95,5 +135,18 @@ public class AdminController {
     @PostMapping(value = "/role")
     public ResponseEntity<?> addRole(@RequestBody RoleDTO request) {
         return roleService.addRole(request);
+    }
+
+    //TODO: CRUD Report
+    @GetMapping(value = "/report/getAll")
+    public ResponseEntity<?> getAllReport(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+                                          @RequestParam(name = "size", required = false, defaultValue = "5") Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return reportService.getAllReport(pageable);
+    }
+
+    @DeleteMapping(value = "/report/delete")
+    public ResponseEntity<?> deleteReportByIds(@RequestParam Long[] ids) {
+        return reportService.deleteReportByIds(ids);
     }
 }

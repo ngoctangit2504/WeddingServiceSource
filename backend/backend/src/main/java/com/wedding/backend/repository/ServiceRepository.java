@@ -1,6 +1,9 @@
 package com.wedding.backend.repository;
 
-import com.wedding.backend.dto.service.*;
+import com.wedding.backend.common.StatusCommon;
+import com.wedding.backend.dto.service.ImageAlbDTO;
+import com.wedding.backend.dto.service.ServiceByPackageDTO;
+import com.wedding.backend.dto.service.ServiceDetail;
 import com.wedding.backend.entity.ServiceEntity;
 import com.wedding.backend.entity.ServiceTypeEntity;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +31,7 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
     ServiceDetail serviceDetailById(@Param("serviceId") Long serviceId);
 
 
-    List<ServiceEntity> findAllBySupplier_IdAndIsDeletedFalse(Pageable pageable, Long supplierId );
+    List<ServiceEntity> findAllBySupplier_IdAndIsDeletedFalse(Pageable pageable, Long supplierId);
 
 
     @Query(
@@ -39,28 +42,42 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
     List<ImageAlbDTO> imagesOfAlbum(@Param("serviceId") Long serviceId, @Param("albName") String albName);
 
     @Query(
-        value = "WITH RankedServices AS (\n" +
-                "    SELECT \n" +
-                "        s.id, \n" +
-                "        s.title, \n" +
-                "        s.image, \n" +
-                "        s.address, \n" +
-                "        s.created_date as  createdDate, \n" +
-                "        t.purchase_date as purchaseDate,\n" +
-                "        s.supplier_id as supplierId,\n" +
-                "        ROW_NUMBER() OVER (PARTITION BY s.supplier_id ORDER BY s.created_date DESC) AS rn\n" +
-                "    FROM services AS s\n" +
-                "    INNER JOIN supplier AS sup ON s.supplier_id = sup.id\n" +
-                "    INNER JOIN transaction AS t ON t.supplier_id = sup.id\n" +
-                "    WHERE t.package_id =:packageId \n" +
-                "      AND s.status = 'APPROVED' \n" +
-                "      AND s.is_deleted = FALSE\n" +
-                ")\n" +
-                "SELECT *\n" +
-                "FROM RankedServices\n" +
-                "WHERE rn <= 5\n" +
-                "ORDER BY supplierId, purchaseDate DESC", nativeQuery = true
+            value = "WITH RankedServices AS (\n" +
+                    "    SELECT \n" +
+                    "        s.id, \n" +
+                    "        s.title, \n" +
+                    "        s.image, \n" +
+                    "        s.address, \n" +
+                    "        s.created_date as  createdDate, \n" +
+                    "        t.purchase_date as purchaseDate,\n" +
+                    "        s.supplier_id as supplierId,\n" +
+                    "        ROW_NUMBER() OVER (PARTITION BY s.supplier_id ORDER BY s.created_date DESC) AS rn\n" +
+                    "    FROM services AS s\n" +
+                    "    INNER JOIN supplier AS sup ON s.supplier_id = sup.id\n" +
+                    "    INNER JOIN transaction AS t ON t.supplier_id = sup.id\n" +
+                    "    WHERE t.package_id =:packageId \n" +
+                    "      AND s.status = 'APPROVED' \n" +
+                    "      AND s.is_deleted = FALSE\n" +
+                    ")\n" +
+                    "SELECT *\n" +
+                    "FROM RankedServices\n" +
+                    "WHERE rn <= 5\n" +
+                    "ORDER BY supplierId, purchaseDate DESC", nativeQuery = true
     )
     List<ServiceByPackageDTO> serviceByPackageId(@Param("packageId") Long packageId, Pageable pageable);
+
+
+    @Query(value = "SELECT Month(t.purchase_date) as month, SUM(sp.price) as tolalPrice \n" +
+            "FROM transaction as t inner join service_package as sp\n" +
+            "where t.package_id = sp.id\n" +
+            "GROUP BY MONTH(t.purchase_date)\n" +
+            "Order by month(t.purchase_date)", nativeQuery = true)
+    List<Object[]> getTotalPaymentServiceByMonth();
+
+    Long countByIsDeletedFalse();
+
+    Long countByStatus(StatusCommon status);
+
+    Long countByIsDeletedFalseAndStatus(StatusCommon status);
 
 }

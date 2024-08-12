@@ -4,6 +4,7 @@ import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithData;
 import com.wedding.backend.base.BaseResultWithDataAndCount;
 import com.wedding.backend.common.StatusCommon;
+import com.wedding.backend.dto.payment.PaymentByMonthDto;
 import com.wedding.backend.dto.service.*;
 import com.wedding.backend.entity.*;
 import com.wedding.backend.exception.ResourceNotFoundException;
@@ -17,9 +18,12 @@ import com.wedding.backend.util.handler.FileHandler;
 import com.wedding.backend.util.message.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -283,5 +287,46 @@ public class Service implements IService {
                 .imageURL(dataConvert.getImagesURL())
                 .albName(dataConvert.getNameAlb())
                 .build();
+    }
+
+    @Override
+    public ResponseEntity<?> getTotalPaymentServiceByMonth() {
+        ResponseEntity<?> responseEntity;
+        try {
+            List<Object[]> result = repository.getTotalPaymentServiceByMonth();
+            List<PaymentByMonthDto> paymentByMonthDtoList = result.stream()
+                    .map(row -> new PaymentByMonthDto((Integer) row[0], (BigDecimal) row[1]))
+                    .toList();
+            responseEntity = new ResponseEntity<>(paymentByMonthDtoList, HttpStatus.OK);
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_ID_FORMAT_INVALID),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return responseEntity;
+    }
+
+    @Override
+    public ResponseEntity<?> getStatusService() {
+        ResponseEntity<?> responseEntity = null;
+        try {
+            Long countPost = this.repository.countByIsDeletedFalse();
+            Long countApprovedPost = this.repository.countByStatus(StatusCommon.APPROVED);
+            Long countRejectedPost = this.repository.countByStatus(StatusCommon.REJECTED);
+            Long countReviewPost = this.repository.countByStatus(StatusCommon.REVIEW);
+            StatusService status;
+            if (countPost == 0) {
+                status = new StatusService(0L, 0L, 0L);
+                return new ResponseEntity<>(status, HttpStatus.OK);
+            }
+
+            Long percentApproved = Math.round((countApprovedPost.doubleValue() / countPost.doubleValue()) * 100.0);
+            Long percentRejected = Math.round((countRejectedPost.doubleValue() / countPost.doubleValue()) * 100.0);
+            Long percentReview = Math.round((countReviewPost.doubleValue() / countPost.doubleValue()) * 100.0);
+            status = new StatusService(percentApproved, percentRejected, percentReview);
+            return new ResponseEntity<>(status, HttpStatus.OK);
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_SYSTEM_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return responseEntity;
     }
 }
