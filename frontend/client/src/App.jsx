@@ -31,6 +31,8 @@ import ManageServices from "./pages/admin/ManageServices"
 import ManageUser from "./pages/admin/ManageUser"
 import ManagePricing from "./pages/admin/ManagePricing"
 import CreatePricing from "./pages/admin/CreatePricing"
+import ManagePayment from "./pages/admin/ManagePayment"
+import ManageReport from "./pages/admin/ManageReport"
 
 
 function App() {
@@ -91,6 +93,8 @@ function App() {
           <Route path={path.MANAGE_USER} element={<ManageUser />} />
           <Route path={path.MANAGE_PRICING} element={<ManagePricing />} />
           <Route path={path.CREATE_PRICING} element={<CreatePricing />} />
+          <Route path={path.MANAGER_PAYMENT} element={<ManagePayment />} />
+          <Route path={path.MANAGE_REPORT} element={<ManageReport />} />
         </Route>
 
         <Route path={path.PAYMENT_RESULT} element={<PaymentResult />} />

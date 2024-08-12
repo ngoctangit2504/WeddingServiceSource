@@ -28,6 +28,8 @@ const path = {
     MANAGE_USER: "quan-ly-thanh-vien",
     MANAGE_PRICING: "quan-ly-bang-gia-dich-vu",
     CREATE_PRICING: "tao-moi-bang-gia-dich-vu",
+    MANAGER_PAYMENT: "payment",
+    MANAGE_REPORT: "bao-cao-vi-pham",
 
 }
 export default path
