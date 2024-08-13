@@ -1,6 +1,5 @@
 package com.wedding.backend.mapper;
 
-import com.wedding.backend.dto.service.ServiceDTO;
 import com.wedding.backend.repository.ServiceTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
