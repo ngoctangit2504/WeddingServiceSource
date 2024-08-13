@@ -1,6 +1,5 @@
 package com.wedding.backend.controller.payment;
 
-import com.wedding.backend.base.BaseResponse;
 import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithData;
 import com.wedding.backend.dto.payment.PaymentDto;
@@ -8,7 +7,6 @@ import com.wedding.backend.dto.payment.PaymentResultData;
 import com.wedding.backend.dto.payment.PaymentReturnDto;
 import com.wedding.backend.dto.payment.ViewPaymentReturnDto;
 import com.wedding.backend.dto.response.VnpayPayIpnResponse;
-import com.wedding.backend.dto.response.VnpayPayResponse;
 import com.wedding.backend.service.IService.payment.IPaymentService;
 import com.wedding.backend.util.extensions.ObjectExtension;
 import jakarta.servlet.http.HttpServletResponse;

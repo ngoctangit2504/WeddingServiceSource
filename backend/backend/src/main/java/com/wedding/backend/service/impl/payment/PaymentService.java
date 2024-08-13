@@ -7,7 +7,6 @@ import com.wedding.backend.config.VnpayConfig;
 import com.wedding.backend.dto.payment.*;
 import com.wedding.backend.dto.request.VnpayPayRequest;
 import com.wedding.backend.dto.response.VnpayPayIpnResponse;
-import com.wedding.backend.dto.response.VnpayPayResponse;
 import com.wedding.backend.entity.*;
 import com.wedding.backend.mapper.PaymentMapper;
 import com.wedding.backend.repository.UserRepository;

@@ -4,7 +4,6 @@ import com.wedding.backend.base.BaseResultWithData;
 import com.wedding.backend.dto.payment.PaymentDto;
 import com.wedding.backend.dto.payment.ViewPaymentReturnDto;
 import com.wedding.backend.dto.response.VnpayPayIpnResponse;
-import com.wedding.backend.dto.response.VnpayPayResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
