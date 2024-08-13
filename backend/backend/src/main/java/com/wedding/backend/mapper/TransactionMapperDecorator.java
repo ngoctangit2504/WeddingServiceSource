@@ -2,7 +2,6 @@ package com.wedding.backend.mapper;
 
 
 import com.wedding.backend.dto.servicePackage.PartServicePackage;
-import com.wedding.backend.dto.supplier.PartSupplier;
 import com.wedding.backend.dto.transaction.TransactionDto;
 import com.wedding.backend.entity.ServicePackageEntity;
 import com.wedding.backend.entity.SupplierEntity;
