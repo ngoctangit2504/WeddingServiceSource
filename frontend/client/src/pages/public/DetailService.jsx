@@ -192,6 +192,12 @@ const DetailPost = ({ navigate, location, dispatch }) => {
               <Link to={SUPPLIER_DETAIL_PATH} className="text-2xl font-bold">
                 {post?.supplierName}
               </Link>
+              <Button
+                onClick={() => navigate(SUPPLIER_DETAIL_PATH)}
+                className="mt-2 bg-blue-500 text-white px-3 py-1 rounded"
+              >
+                Xem Trang
+              </Button>
             </div>
           </div>
           <div className="mt-6">

@@ -1,11 +1,10 @@
 import React, { Fragment, useCallback, useEffect, useState } from "react"
 
-//import { InputForm, Button, InputRadio, OtpVerify } from "../../components/inputs"
 // import component
 import Button from '@/components/common/Button'
 import InputForm from '@/components/inputs/InputForm'
 import InputRadio from '@/components/inputs/InputRadio';
-//import OtpVerify from '@/components/auth/OtpVerify';
+import OtpVerify from '@/components/auth/OtpVerify';
 
 import { useForm } from "react-hook-form"
 import Swal from "sweetalert2"
@@ -13,7 +12,6 @@ import { useSelector } from "react-redux"
 import withBaseTopping from "@/hocs/WithBaseTopping"
 import { apiRegister, apiLogin } from "@/apis/user"
 import { Link, useSearchParams } from "react-router-dom"
-import path from "@/ultils/path"
 import { modal } from "@/redux/appSlice"
 import { login, selectRole } from "@/redux/userSlice"
 
@@ -46,7 +44,7 @@ const Login = ({ navigate, dispatch, location }) => {
       setIsLoading(false)
       if (response.token) {
         dispatch(login({ token: response.token }))
-       //  if (searchParams.get("redirect"))
+        //  if (searchParams.get("redirect"))
         return navigate("/")
       } else {
         Swal.fire('Oops...', response.message, 'error')
@@ -56,20 +54,19 @@ const Login = ({ navigate, dispatch, location }) => {
       if (phoneNumber) payload.phoneNumber = `+84${phoneNumber?.substring(1)}`
       setIsLoading(true)
       const response = await apiRegister(payload)
-      console.log("message of body: " + response.body.message)
       setIsLoading(false)
-      if (response.body.success) {
-        if (selectedRole === "ROLE_MANAGE") {
+      if (response.statusCodeValue === 200) {
+        if (selectedRole === "ROLE_SUPPLIER") {
           dispatch(
             modal({
               isShowModal: true,
-              //   modalContent: <OtpVerify setVariant={setVariant} />,
+              modalContent: <OtpVerify setVariant={setVariant} />,
             })
           )
         } else {
           Swal.fire({
             icon: "success",
-            text: response.body.message,
+            text: response.body,
             title: "Congrats!",
             showConfirmButton: true,
             confirmButtonText: "Đi tới đăng nhập",
@@ -77,7 +74,7 @@ const Login = ({ navigate, dispatch, location }) => {
             return isConfirmed && setVariant("LOGIN")
           })
         }
-      } else Swal.fire("Oops!", response.body.message, "error")
+      } else Swal.fire("Oops!", response.body, "error")
     }
   }
   const toggleVariant = useCallback(() => {
@@ -92,13 +89,13 @@ const Login = ({ navigate, dispatch, location }) => {
           to="/"
           className="mx-auto w-main text-white font-bold flex items-center justify-between text-3xl"
         >
-          <span style={{ color: '#e4007f' }}>SweetDream.com</span>
-          {/* <span className="text-sm font-light">❓ Help</span> */}
+          <span style={{ color: '#e4007f' }}>SweetDream</span>
+          <span className="text-sm font-light">❓ Help</span>
         </Link>
       </div>
       <div className="flex flex-row w-full">
         <div className="w-1/2">
-          <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg" className="img-fluid" alt="Phone image" />
+          <img src="https://zexy.net/images/guideline/bg_hanTop.png" className="img-fluid" alt="Phone image" />
         </div>
         <div className="w-1/2">
           <form
@@ -155,7 +152,7 @@ const Login = ({ navigate, dispatch, location }) => {
                     id="role"
                     values={[
                       { value: "ROLE_CUSTOMER", label: "Tìm kiếm" },
-                      { value: "ROLE_MANAGE", label: "Chính chủ" },
+                      { value: "ROLE_SUPPLIER", label: "Chính chủ" },
                     ]}
                     register={register}
                     errors={errors}

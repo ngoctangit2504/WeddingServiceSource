@@ -17,7 +17,7 @@ const OtpVerify = ({ dispatch, setVariant }) => {
       otpNumber,
       userName: selectedUserName,
     })
-    if (response.success) {
+    if (response.body.success) {
       Swal.fire({
         icon: "success",
         text: "Đăng ký thành công. Đi tới đăng nhập",
@@ -26,7 +26,7 @@ const OtpVerify = ({ dispatch, setVariant }) => {
         dispatch(modal({ isShowModal: false, modalContent: null }))
         setVariant && setVariant("LOGIN")
       })
-    } else toast.error(response.message)
+    } else toast.error(response.body.message)
   }
   return (
     <div

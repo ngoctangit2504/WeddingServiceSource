@@ -44,14 +44,14 @@ const Navigation = ({ dispatch, location, navigate }) => {
       name: "KHUYỂN MÃI",
       id: "nhacanhochothue",
       type: path.CANHO,
-      subname: "Nhà, Căn hộ cho thuê",
+      subname: "Khuyến mãi",
     },
     {
       path: "/danh-sach/?type=" + path.TIMOGHEP,
       name: "KINH NGHIỆM & Ý TƯỞNG",
       id: "timoghep",
       type: path.TIMOGHEP,
-      subname: "Tìm ở ghép",
+      subname: "Kinh nghiệm và ý tưởng",
     },
     {
       path: "/" + path.PRICING,
@@ -214,8 +214,8 @@ const Navigation = ({ dispatch, location, navigate }) => {
                 {current?.roles?.some((el) => el.name === "ROLE_SUPPLIER") && (
                   <Link
                     to={`/${path.SUPPLIER}/${path.DEPOSIT}`}
-                    className="text-emerald-800-300 rounded-md flex items-center gap-2 border  bg-gradient-to-r to-main-yellow from-main-orange text-sm font-medium px-6 py-2"
-                  >
+                    className="text-white rounded-md flex items-center gap-2 border text-sm font-medium px-6 py-2"
+                    style={{ background: 'linear-gradient(216.54deg, #f800b6 0%, #ef007f 100%)' }}                  >
                     Nạp tiền
                   </Link>
                 )}

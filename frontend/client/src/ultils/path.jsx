@@ -21,6 +21,7 @@ const path = {
     CREATE_SERVICE: "tao-moi-dich-vu",
     PRICING: "bang-gia-goi",
     SUPPLIER_DETAIL__SID__NAME: "chi-tiet-nha-cung-cap/:supplierId/:supplierName",
+    MANAGE_BOOKING: "danh-sach-yeu-cau-bao-gia",
 
     ADMIN: "admin",
     DASHBOARD: "dashboard",

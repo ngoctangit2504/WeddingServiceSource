@@ -33,6 +33,7 @@ import ManagePricing from "./pages/admin/ManagePricing"
 import CreatePricing from "./pages/admin/CreatePricing"
 import ManagePayment from "./pages/admin/ManagePayment"
 import ManageReport from "./pages/admin/ManageReport"
+import ManageBooking from "./pages/supplier/ManageBooking"
 
 
 function App() {
@@ -84,6 +85,8 @@ function App() {
           <Route path={path.MANAGE_DEPOSIT} element={<ManageDeposit />} />
           <Route path={path.MANAGE_SERVICE} element={<ManageService />} />
           <Route path={path.CREATE_SERVICE} element={<CreateService />} />
+          <Route path={path.MANAGE_BOOKING} element={<ManageBooking />} />
+
         </Route>
 
         {/* Admin routes */}

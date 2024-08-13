@@ -70,6 +70,13 @@ export const supplierSidebar = [
     type: "SINGLE",
   },
   {
+    id: 1784,
+    name: "Yêu cầu báo giá",
+    path: `/${path.SUPPLIER}/${path.MANAGE_BOOKING}`,
+    icon: <BsPostcard size={20} />,
+    type: "SINGLE",
+  },
+  {
     id: 578,
     name: "Nạp tiền",
     path: `/${path.SUPPLIER}/${path.DEPOSIT}`,

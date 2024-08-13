@@ -30,7 +30,7 @@ const Filter = ({ location, navigate, dispatch }) => {
     const [districts, setDistricts] = useState([]);
     const [wards, setWards] = useState([]);
     const { setValue, watch, register } = useForm()
-    const [posts, setPosts] = useState()
+    const [posts, setPosts] = useState([])
     const [searchParams] = useSearchParams()
     const [provinceDetail, setProvinceDetail] = useState(null)
     const setCustomValue = (id, val) =>
@@ -72,18 +72,18 @@ const Filter = ({ location, navigate, dispatch }) => {
 
     useEffect(() => {
         const text = clsx(
-          ward?.ward_name,
-          ward?.ward_name && ",",
-          district?.district_name,
-          district?.ndistrict_nameame && ",",
-          province?.province_name
+            ward?.ward_name,
+            ward?.ward_name && ",",
+            district?.district_name,
+            district?.ndistrict_nameame && ",",
+            province?.province_name
         )
         const textModified = text
-          ?.split(",")
-          ?.map((el) => el.trim())
-          ?.join(", ")
+            ?.split(",")
+            ?.map((el) => el.trim())
+            ?.join(", ")
         setCustomValue("address", textModified)
-      }, [province, district, ward])
+    }, [province, district, ward])
 
     useEffect(() => {
         if (!province) {
@@ -204,17 +204,21 @@ const Filter = ({ location, navigate, dispatch }) => {
                         </div>
                     </div>
                 </  BoxFilter>
-                <BoxFilter title="KHÁC">
-                    <div className="flex flex-col gap-2 p-2">
-                        <SelectLib
-                            className="text-sm"
-                            onChange={(val) => setCustomValue("target", val)}
-                            value={target}
-                            options={targets}
-                            placeholder="Đối tượng"
-                        />
-                        Other
-                    </div>
+                <BoxFilter
+                    className="flex justify-center items-center text-xl font-semibold"
+                    title="Bài viết liên quan"
+                    containerClassName="bg-white w-full"
+                >
+                    {posts?.data
+                        ?.filter((el, idx) => idx < 4)
+                        ?.map((el) => (
+                            <LongCard
+                                containerClassName="rounded-none border-b w-full"
+                                hideImage
+                                key={el.id}
+                                {...el}
+                            />
+                        ))}
                 </BoxFilter>
             </div>
         </section>

@@ -6,6 +6,12 @@ import React from "react"
 import { Link } from "react-router-dom"
 import { twMerge } from "tailwind-merge"
 import { Button } from ".."
+import { Booking } from ".."
+import { useDispatch } from "react-redux"
+import { MdForwardToInbox  } from "react-icons/md"
+
+import { modal } from "@/redux/appSlice"
+
 
 const LongCard = ({
   image,
@@ -17,6 +23,8 @@ const LongCard = ({
   containerClassName,
   id,
 }) => {
+    const dispatch = useDispatch()
+
   return (
     <div
       className={twMerge(
@@ -49,8 +57,18 @@ const LongCard = ({
         <span className="text-sm text-gray-500">{address}</span>
         <div className="mt-3 flex justify-between items-center">
           <Button
+            onClick={() =>
+              dispatch(
+                modal({
+                  isShowModal: true,
+                  modalContent: <Booking id={id} />,
+                })
+              )
+            }
+            className="bg-pink-500"
           >
-            Nhận Báo Giá
+            <MdForwardToInbox size={22} />
+            Nhận báo giá
           </Button>
           <span className="text-gray-500 text-sm">
             {moment(createdDate).format("DD/MM/YYYY")}

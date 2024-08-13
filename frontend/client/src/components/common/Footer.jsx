@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="w-main mx-auto grid grid-cols-5 gap-4">
         <div className="col-span-1 flex justify-center items-center">
           <span className="text-3xl font-bold tracking-tight">
-            SweetDream.online
+            SweetDream.come
           </span>
         </div>
         <div className="col-span-1 py-6 flex flex-col gap-1">

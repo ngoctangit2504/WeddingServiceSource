@@ -9,7 +9,7 @@ const Button = ({
   disabled = false,
   onClick,
   type = "button",
-  bgColor = "bg-pink-500",
+  bgColor = "linear-gradient(216.54deg, #f800b6 0%, #ef007f 100%)",
   textColor = "text-white",
   className,
 }) => {
@@ -20,7 +20,6 @@ const Button = ({
         clsx(
           "px-4 py-3 text-sm font-semibold rounded-md flex justify-center items-center gap-2 outline-none",
           fullWidth && "w-full",
-          bgColor,
           textColor,
           disabled && "opacity-50",
           className
@@ -28,6 +27,7 @@ const Button = ({
       )}
       onClick={onClick}
       disabled={disabled}
+      style={{ background: bgColor }} // Apply the gradient as inline style
     >
       {disabled && (
         <span className="animate-spin">

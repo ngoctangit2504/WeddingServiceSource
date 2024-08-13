@@ -10,6 +10,8 @@ import { MdOutlineCheckCircle } from "react-icons/md"
 import clsx from "clsx"
 import { getCurrent } from "@/redux/action"
 import Swal from "sweetalert2"
+import { NavLink } from "react-router-dom"
+import path from "@/ultils/path"
 
 const PricingItem = ({
   name,
@@ -22,7 +24,7 @@ const PricingItem = ({
   const dispatch = useDispatch()
   const { current } = useSelector((s) => s.user)
   const handleSubcribe = async () => {
-    Swal.fire({
+    const result = await Swal.fire({
       icon: "info",
       title: "Xác nhận thao tác",
       text: `Bạn có chắc muốn đăng ký gói dịch vụ ${name} không?`,
@@ -30,20 +32,30 @@ const PricingItem = ({
       showConfirmButton: true,
       confirmButtonText: "Đăng ký",
       cancelButtonText: "Quay lại",
-    }).then(async (rs) => {
-      if (rs.isConfirmed) {
-        if (current?.phoneNumberConfirmed) {
-          const response = await apiSubcribePricing({ servicePackageId })
+    });
+
+    if (result.isConfirmed) {
+      if (current?.phoneNumberConfirmed) {
+        try {
+          const response = await apiSubcribePricing({ servicePackageId });
+
           if (response.success) {
-            toast.success(response.message)
-            dispatch(getCurrent())
-          } else toast.error(response.message)
-        } else {
-          dispatch(modal({ isShowModal: true, modalContent: <VerifyPhone /> }))
+            toast.success(response.message);
+            dispatch(getCurrent());
+          } else if (response.message === "Nhà cung cấp không tồn tại!") {
+            window.location.href = `/${path.SUPPLIER}/${path.INFORMATION_SUPPLIER}`;
+          } else {
+            toast.error(response.message);
+          }
+        } catch (error) {
+          toast.error("Có lỗi xảy ra, vui lòng thử lại sau.");
         }
+      } else {
+        dispatch(modal({ isShowModal: true, modalContent: <VerifyPhone /> }));
       }
-    })
-  }
+    }
+  };
+
 
   // Đảm bảo giá trị boolean cho thuộc tính disabled
   // const isDisabled = current?.servicePackageUsed === name;
@@ -51,9 +63,9 @@ const PricingItem = ({
     <div className={clsx("col-span-1 h-full mb-[150px]")}>
       <h3
         className={clsx(
-          "text-center p-4 border border-emerald-500 bg-emerald-700 text-white font-semibold rounded-t-md",
+          "text-center p-4 border border-pink-500 bg-pink-700 text-white font-semibold rounded-t-md",
           current?.servicePackageUsed === name &&
-          "bg-orange-700 border-orange-700"
+          "bg-red-700 border-red-700"
         )}
       >
         {name}
@@ -61,7 +73,7 @@ const PricingItem = ({
       <div
         className={clsx(
           "flex rounded-b-md border h-[260px] border-emerald-500 flex-col gap-2 justify-between items-center py-3",
-          current?.servicePackageUsed === name && " border-orange-700"
+          current?.servicePackageUsed === name && " border-red-700"
         )}
       >
         <div className="flex flex-col gap-2 items-center">
@@ -122,9 +134,10 @@ const Pricing = () => {
             marginBottom: "30px",
             textAlign: "center",
             fontSize: "2em",
+            color: "#e91e63", // Bright pink for headings
           }}
         >
-          Giới thiệu bảng giá gói dịch vụ
+          Nâng Tầm Tin Đăng Của Bạn với Các Gói VIP
         </h1>
       </header>
       <div className="container clearfix">
@@ -134,58 +147,35 @@ const Pricing = () => {
             padding: "20px",
             border: 0,
             boxShadow: "0 0 30px 10px rgb(0 0 0 / 3%)",
+            background: 'url("https://matchthemes.com/demohtml/tilia/images/pages/img-about1.jpg") no-repeat center center',
+            backgroundSize: 'cover',
+            color: '#fff',
+            backgroundColor: 'rgba(233, 30, 99, 0.9)', // Overlay pink color for a cohesive look
           }}
         >
           <div className="section-content">
-            <p style={{ lineHeight: "1.5" }}>
-              Chào mừng bạn đến với trang web tìm kiếm dịch vụ cưới hỏi
-              - sweetdream.com!
+            <p style={{ lineHeight: "1.5", fontSize: "1.2em", textAlign: "justify" }}>
+              Chào mừng bạn đến với sweetdream.com - nền tảng dịch vụ cưới hỏi hàng đầu!
+              Chúng tôi cung cấp các gói dịch vụ VIP để giúp tin đăng của bạn nổi bật
+              trên trang chủ, thu hút được nhiều khách hàng hơn.
             </p>
-            <p>ƯU ĐIỂM DỊCH VỤ:</p>
-            <p style={{ marginBottom: "10px", lineHeight: "1.5" }}>
-              <FaCheck
-                style={{
-                  display: "inline-block",
-                  float: "left",
-                  marginRight: "10px",
-                  color: "green",
-                }}
-              />
-              <strong>Quản Lý...:</strong> Người dùng có thể....
-            </p>
-            <p style={{ marginBottom: "10px", lineHeight: "1.5" }}>
-              <FaCheck
-                style={{
-                  display: "inline-block",
-                  float: "left",
-                  marginRight: "10px",
-                  color: "green",
-                }}
-              />
-              <strong>Đăng Tin Dễ Dàng:</strong> Người dùng có thể...
-            </p>
-            <p style={{ marginBottom: "10px", lineHeight: "1.5" }}>
-              <FaCheck
-                style={{
-                  display: "inline-block",
-                  float: "left",
-                  marginRight: "10px",
-                  color: "green",
-                }}
-              />
-              <strong>Quản Lý...:</strong> Người dùng có thể...
-            </p>
-            <p style={{ lineHeight: "1.5" }}>
-              <FaCheck
-                style={{
-                  display: "inline-block",
-                  float: "left",
-                  marginRight: "10px",
-                  color: "green",
-                }}
-              />
-              <strong>Thống Kê...</strong> Người dùng có thể...
-            </p>
+            <p style={{ fontSize: "1.1em", marginTop: "20px" }}>ƯU ĐIỂM GÓI VIP:</p>
+            <div className="benefit-item" style={{ color: "#ff80ab" }}>
+              <FaCheck className="benefit-icon" />
+              <strong>Tăng Hiển Thị:</strong> Đảm bảo tin đăng của bạn luôn xuất hiện trên trang chủ.
+            </div>
+            <div className="benefit-item" style={{ color: "#ff80ab" }}>
+              <FaCheck className="benefit-icon" />
+              <strong>Tiếp Cận Nhiều Khách Hàng Hơn:</strong> Gói VIP giúp bạn tiếp cận đúng đối tượng khách hàng.
+            </div>
+            <div className="benefit-item" style={{ color: "#ff80ab" }}>
+              <FaCheck className="benefit-icon" />
+              <strong>Tùy Chọn Linh Hoạt:</strong> Chọn gói VIP phù hợp với nhu cầu và ngân sách của bạn.
+            </div>
+            <div className="benefit-item" style={{ color: "#ff80ab" }}>
+              <FaCheck className="benefit-icon" />
+              <strong>Hỗ Trợ Tận Tình:</strong> Đội ngũ hỗ trợ luôn sẵn sàng giúp đỡ bạn bất cứ lúc nào.
+            </div>
           </div>
         </section>
       </div>
@@ -197,6 +187,7 @@ const Pricing = () => {
           marginBottom: "30px",
           textAlign: "center",
           fontSize: "2em",
+          color: "#e91e63", // Same pink color for consistency
         }}
       >
         Bảng Giá Dịch Vụ

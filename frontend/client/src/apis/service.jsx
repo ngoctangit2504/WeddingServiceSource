@@ -13,6 +13,12 @@ export const apiCreateNewBooking = (data) =>
         data,
     })
 
+export const apiGetBookingServices = () =>
+    axios({
+        url: "/booking-service/booking-service-by-supplier-id",
+        method: "GET"
+    })
+
 export const apiGetServiceByDeleted = (params) =>
     axios({
         url: "/service/getAllByDeleted",

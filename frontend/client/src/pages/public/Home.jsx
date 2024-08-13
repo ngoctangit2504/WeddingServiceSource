@@ -9,34 +9,10 @@ import ProvinceItem from "@/components/topProvince/ProvinceItem";
 import { apiGetServiceByDeleted, apiGetServiceByServiceType } from "@/apis/service";
 import Card from "@/components/posts/Card";
 import { useDispatch, useSelector } from "react-redux"
-
-const topProvinces = [
-    {
-        provinceName: "Hà Nội",
-        image: "https://www.blissvn.com/Data/Sites/1/News/340/chup-anh-cuoi-ha-noi-mspace.jpg",
-        totalPosts: 120,
-    },
-    {
-        provinceName: "Hồ Chí Minh",
-        image: "https://palatinostudio.com/wp-content/uploads/2021/04/chup-anh-cuoi-ha-noi-11-1.jpg",
-        totalPosts: 150,
-    },
-    {
-        provinceName: "Đà Nẵng",
-        image: "https://bizweb.dktcdn.net/100/175/849/articles/tong-hop-cac-dia-diem-chup-anh-cuoi-dep-nhat-tai-ha-noi.jpg?v=1495178084687",
-        totalPosts: 80,
-    },
-    {
-        provinceName: "Hội An",
-        image: "https://static.vinwonders.com/production/dia-diem-chup-anh-cuoi-dep-o-ha-noi-2.jpg",
-        totalPosts: 60,
-    },
-    {
-        provinceName: "Nha Trang",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7EPUAMVh5wHnNX1pVOxiie-i--OoaqvJSJQ&s",
-        totalPosts: 90,
-    },
-]
+import { VideoPlayer } from "@/components";
+import Session from "redux-persist/lib/storage/session";
+import { ImageSlider } from "@/components";
+import { ServiceTypeGrid } from "@/components";
 
 
 const Home = () => {
@@ -74,10 +50,10 @@ const Home = () => {
         let response = null;
         let allData = []; // Mảng lưu trữ tất cả dữ liệu tìm thấy
         let dataVIP3 = null; // Dữ liệu của VIP 3
-    
+
         for (const packageId of packageIds) {
             response = await apiGetServiceByPackageVIP({ packageId, size: 30 });
-    
+
             if (response?.data) {
                 // Xử lý dữ liệu cho VIP 3
                 if (packageId === 3) {
@@ -90,7 +66,7 @@ const Home = () => {
                         dataVIP3 = response.data;
                     }
                 }
-    
+
                 // Xử lý dữ liệu cho VIP 2 và VIP 1
                 if (packageId === 2) {
                     if (response.count >= 5) {
@@ -103,7 +79,7 @@ const Home = () => {
                         allData = [...(dataVIP3 || []), ...response.data];
                     }
                 }
-    
+
                 if (packageId === 1) {
                     // Kết hợp dữ liệu từ VIP 1 với các dữ liệu đã có
                     allData = [...(dataVIP3 || []), ...response.data];
@@ -112,13 +88,13 @@ const Home = () => {
                 }
             }
         }
-    
+
         // Nếu không có dữ liệu từ bất kỳ packageId nào, bạn có thể xử lý lỗi hoặc thông báo ở đây
         if (allData.length === 0) {
             console.error('No data found for any packageId');
         }
     };
-    
+
 
 
 
@@ -133,6 +109,14 @@ const Home = () => {
         fetchServiceByTypeDate()
         fetchServiceByVIP3Data()
     }, [])
+
+
+    const images = [
+        "https://matchthemes.com/demohtml/tilia/images/pages/img-about1.jpg",
+        "https://matchthemes.com/demohtml/tilia/images/pages/portfolio1-page.jpg",
+        "https://matchthemes.com/demohtml/tilia/images/home/slider-1.jpg",
+        "https://matchthemes.com/demohtml/tilia/images/home/slider-2.jpg",
+    ];
 
     return (
         <section className="pb-16">
@@ -162,18 +146,32 @@ const Home = () => {
                     />
                 ))}
             </Section>
+
+            <Section
+                className="w-full h-screenflex items-center justify-center bg-[#f9f5f3] mt-20 mb-16" // Full height and center content
+                contentClassName="flex justify-center"
+            >
+                <div>
+                    <ImageSlider images={images} />
+                </div>
+            </Section>
+
             <Section
                 className="w-main mx-auto text-neutral-400"
-                title="Nhà hàng tiệc cưới"
-                contentClassName="grid grid-cols-4 gap-4"
+                title="Các dịch vụ tiệc cưới"
+                contentClassName="grid grid-cols-1 gap-4"
             >
-                {serviceByType?.map((el) => (
-                    <Card
-                        isLike={wishlist?.some((n) => n.id === el.id)}
-                        {...el}
-                        key={el.id}
-                    />
-                ))}
+                <ServiceTypeGrid />
+            </Section>
+
+            <Section
+                className="w-full h-screenflex items-center justify-center bg-[#f9f5f3] mt-20 mb-16" // Full height and center content
+                contentClassName="flex justify-center"
+            >
+                <VideoPlayer
+                    videoSrc="https://www.youtube.com/embed/3UdRzxr8hhM?rel=0&autoplay=1"
+                    title="Happy Ending"
+                />
             </Section>
         </section>
     )
