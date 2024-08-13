@@ -1,6 +1,5 @@
 package com.wedding.backend.dto.bookingService;
 
-import com.wedding.backend.entity.BookingEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

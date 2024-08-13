@@ -136,6 +136,7 @@ public class TransactionServiceImpl implements ITransactionService {
                                 //TODO: Minus balance of user
                                 BigDecimal newBalance = user.getBalance().subtract(servicePackageEntity.get().getPrice());
                                 user.setBalance(newBalance);
+                                userRepository.save(user);
 
                                 //TODO: Up role user to ROLE_UTIL_MANAGE --> REMOVE
 //                            Optional<RoleEntity> role = Optional.of(roleRepository.findByName(ModelCommon.ULTI_MANAGER));

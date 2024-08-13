@@ -3,6 +3,7 @@ package com.wedding.backend.service.impl.booking;
 import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithDataAndCount;
 import com.wedding.backend.dto.bookingService.BookingServiceDTO;
+import com.wedding.backend.dto.bookingService.BookingServicesBySupplier;
 import com.wedding.backend.entity.BookingEntity;
 import com.wedding.backend.entity.ServiceEntity;
 import com.wedding.backend.entity.SupplierEntity;
@@ -45,14 +46,15 @@ public class BookingService implements IBookingService {
     }
 
     @Override
-    public BaseResultWithDataAndCount<List<BookingServiceDTO>> getBookingServiceBySupplierId(Principal connectedUser) {
-        BaseResultWithDataAndCount<List<BookingServiceDTO>> result = new BaseResultWithDataAndCount<>();
+    public BaseResultWithDataAndCount<List<BookingServicesBySupplier>> getBookingServiceBySupplierId(Principal connectedUser) {
+        BaseResultWithDataAndCount<List<BookingServicesBySupplier>> result = new BaseResultWithDataAndCount<>();
         try {
             var user = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
             Optional<SupplierEntity> supplier = supplierRepository.findByUser_Id(user.getId());
             if (supplier.isPresent()) {
-                List<BookingServiceDTO> resultFromDb = bookingRepository.findByServerBooking_Supplier_Id(supplier.get().getId());
-                result.set(resultFromDb,(long) resultFromDb.size());
+                Long supplierID = supplier.get().getId(); // Changed to 'supplierID'
+                List<BookingServicesBySupplier> resultFromDb = bookingRepository.bookingServiceBySupplier(supplierID);
+                result.set(resultFromDb, (long) resultFromDb.size());
             } else {
                 throw new ResourceNotFoundException(MessageUtil.SUPPLIER_NOT_FOUND);
             }

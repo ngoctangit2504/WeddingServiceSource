@@ -12,4 +12,6 @@ public class ServiceTypeDTO {
     private String name;
     private String description;
     private String iconURL;
+    private String imageURL;
+
 }

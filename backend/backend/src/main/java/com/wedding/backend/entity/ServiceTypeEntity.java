@@ -25,6 +25,9 @@ public class ServiceTypeEntity {
     @Column(name = "icon_url")
     private String iconURL;
 
+    @Column(name = "image_url")
+    private String imageURL;
+
     @Column(name = "description")
     private String description;
 

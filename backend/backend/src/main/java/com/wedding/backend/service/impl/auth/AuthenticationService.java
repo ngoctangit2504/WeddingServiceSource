@@ -5,7 +5,6 @@ import com.wedding.backend.common.ModelCommon;
 import com.wedding.backend.common.StatusCommon;
 import com.wedding.backend.dto.auth.*;
 import com.wedding.backend.entity.RoleEntity;
-import com.wedding.backend.entity.TokenEntity;
 import com.wedding.backend.entity.UserEntity;
 import com.wedding.backend.repository.RoleRepository;
 import com.wedding.backend.repository.TokenRepository;
@@ -149,6 +148,9 @@ public class AuthenticationService implements IAuthenticationService {
                 }
                 BaseResult baseResult = new BaseResult(true, MessageUtil.MSG_OTP_CODE_CORRECT);
                 return new ResponseEntity<>(baseResult, HttpStatus.OK);
+            } else {
+                BaseResult baseResult = new BaseResult(false, MessageUtil.MSG_OTP_CODE_INCORRECT);
+                return new ResponseEntity<>(baseResult, HttpStatus.OK);
             }
         } catch (Exception ex) {
             BaseResult baseResult = new BaseResult(false, ex.getMessage());
@@ -156,6 +158,7 @@ public class AuthenticationService implements IAuthenticationService {
         }
         return response;
     }
+
     private boolean baseRegister(RegisterDTO request) {
         RoleEntity role = roleRepository.findByName(request.getRole());
         if (role != null) {
