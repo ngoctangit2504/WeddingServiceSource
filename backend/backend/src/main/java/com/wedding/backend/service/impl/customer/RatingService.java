@@ -3,7 +3,6 @@ package com.wedding.backend.service.impl.customer;
 import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithData;
 import com.wedding.backend.dto.customer.rating.AverageRatingPoint;
-import com.wedding.backend.dto.customer.rating.RatingDto;
 import com.wedding.backend.dto.customer.rating.RatingWithGroup;
 import com.wedding.backend.entity.RatingEntity;
 import com.wedding.backend.entity.UserEntity;

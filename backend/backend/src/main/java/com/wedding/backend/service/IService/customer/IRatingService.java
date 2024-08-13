@@ -4,7 +4,6 @@ package com.wedding.backend.service.IService.customer;
 import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithData;
 import com.wedding.backend.dto.customer.rating.AverageRatingPoint;
-import com.wedding.backend.dto.customer.rating.RatingDto;
 
 import java.security.Principal;
 import java.util.List;

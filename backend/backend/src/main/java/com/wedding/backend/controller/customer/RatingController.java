@@ -1,6 +1,5 @@
 package com.wedding.backend.controller.customer;
 
-import com.wedding.backend.dto.customer.rating.RatingDto;
 import com.wedding.backend.service.IService.customer.IRatingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
