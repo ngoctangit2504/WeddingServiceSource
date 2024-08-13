@@ -2,8 +2,6 @@ package com.wedding.backend.controller.payment;
 
 import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithData;
-import com.wedding.backend.dto.payment.PaymentDto;
-import com.wedding.backend.dto.payment.PaymentResultData;
 import com.wedding.backend.dto.payment.PaymentReturnDto;
 import com.wedding.backend.dto.payment.ViewPaymentReturnDto;
 import com.wedding.backend.dto.response.VnpayPayIpnResponse;
