@@ -1,6 +1,5 @@
 package com.wedding.backend.dto.transaction;
 
-import com.wedding.backend.dto.servicePackage.PartServicePackage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
