@@ -10,7 +10,6 @@ import com.wedding.backend.dto.auth.OTPRequestDto;
 import com.wedding.backend.dto.auth.OTPValidationRequestDto;
 import com.wedding.backend.dto.auth.ResponseSendOTP;
 import com.wedding.backend.dto.user.UpdateProfileRequest;
-import com.wedding.backend.dto.user.UserDTO;
 import com.wedding.backend.dto.user.UserStatus;
 import com.wedding.backend.entity.RoleEntity;
 import com.wedding.backend.entity.UserEntity;

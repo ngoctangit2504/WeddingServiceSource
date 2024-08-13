@@ -6,7 +6,6 @@ import com.wedding.backend.base.BaseResultWithDataAndCount;
 import com.wedding.backend.dto.auth.OTPRequestDto;
 import com.wedding.backend.dto.auth.OTPValidationRequestDto;
 import com.wedding.backend.dto.user.UpdateProfileRequest;
-import com.wedding.backend.dto.user.UserDTO;
 import com.wedding.backend.entity.UserEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;

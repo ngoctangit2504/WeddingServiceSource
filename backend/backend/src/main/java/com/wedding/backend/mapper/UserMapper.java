@@ -1,7 +1,6 @@
 package com.wedding.backend.mapper;
 
 import com.wedding.backend.entity.UserEntity;
-import com.wedding.backend.dto.user.UserDTO;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
