@@ -1,6 +1,5 @@
 package com.wedding.backend.mapper;
 
-import com.wedding.backend.dto.customer.comment.CommentPostDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

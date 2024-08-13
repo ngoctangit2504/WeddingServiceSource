@@ -1,7 +1,6 @@
 package com.wedding.backend.controller.customer;
 
 
-import com.wedding.backend.dto.customer.comment.CommentPostDto;
 import com.wedding.backend.service.IService.customer.ICommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
