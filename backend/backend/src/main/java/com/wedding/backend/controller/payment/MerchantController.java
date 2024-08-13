@@ -1,6 +1,5 @@
 package com.wedding.backend.controller.payment;
 
-import com.wedding.backend.dto.merchant.MerchantDto;
 import com.wedding.backend.service.IService.payment.IMerchantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

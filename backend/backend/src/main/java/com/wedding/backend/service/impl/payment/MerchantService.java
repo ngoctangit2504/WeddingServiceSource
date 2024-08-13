@@ -1,7 +1,6 @@
 package com.wedding.backend.service.impl.payment;
 
 
-import com.wedding.backend.dto.merchant.MerchantDto;
 import com.wedding.backend.repository.payment.MerchantRepository;
 import com.wedding.backend.service.IService.payment.IMerchantService;
 import com.wedding.backend.util.helper.HashHelper;
