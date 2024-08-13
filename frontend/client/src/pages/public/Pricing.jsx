@@ -65,7 +65,7 @@ const PricingItem = ({
         className={clsx(
           "text-center p-4 border border-pink-500 bg-pink-700 text-white font-semibold rounded-t-md",
           current?.servicePackageUsed === name &&
-          "bg-red-700 border-red-700"
+          "bg-green-500 border-green-700"
         )}
       >
         {name}
@@ -73,7 +73,7 @@ const PricingItem = ({
       <div
         className={clsx(
           "flex rounded-b-md border h-[260px] border-emerald-500 flex-col gap-2 justify-between items-center py-3",
-          current?.servicePackageUsed === name && " border-red-700"
+          current?.servicePackageUsed === name && " border-green-700"
         )}
       >
         <div className="flex flex-col gap-2 items-center">
@@ -93,7 +93,7 @@ const PricingItem = ({
         </div>
         <div className="w-full px-4">
           {current?.servicePackageUsed === name ? (
-            <div className="flex items-center py-2 px-4 rounded-md justify-center bg-orange-700 text-white gap-2">
+            <div className="flex items-center py-2 px-4 rounded-md justify-center bg-green-700 text-white gap-2">
               <MdOutlineCheckCircle size={22} />
               Đã đăng ký
             </div>
