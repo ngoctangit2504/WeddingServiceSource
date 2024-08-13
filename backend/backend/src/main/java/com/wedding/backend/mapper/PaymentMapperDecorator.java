@@ -1,7 +1,6 @@
 package com.wedding.backend.mapper;
 
 
-import com.wedding.backend.dto.payment.PaymentDtoMapper;
 import com.wedding.backend.entity.PaymentEntity;
 import com.wedding.backend.entity.UserEntity;
 import com.wedding.backend.repository.UserRepository;
