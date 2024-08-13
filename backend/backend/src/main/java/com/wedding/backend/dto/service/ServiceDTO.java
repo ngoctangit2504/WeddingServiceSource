@@ -1,7 +1,5 @@
 package com.wedding.backend.dto.service;
 
-import com.wedding.backend.common.StatusCommon;
-import com.wedding.backend.entity.ServiceTypeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

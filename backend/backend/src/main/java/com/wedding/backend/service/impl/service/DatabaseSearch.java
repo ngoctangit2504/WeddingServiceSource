@@ -3,7 +3,6 @@ package com.wedding.backend.service.impl.service;
 
 import com.wedding.backend.base.BaseResultWithDataAndCount;
 import com.wedding.backend.dto.service.ServiceDTO;
-import com.wedding.backend.entity.ServiceTypeEntity;
 import com.wedding.backend.repository.ServiceTypeRepository;
 import com.wedding.backend.service.IService.service.IDatabaseSearch;
 import org.springframework.beans.factory.annotation.Autowired;

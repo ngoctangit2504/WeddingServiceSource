@@ -6,7 +6,6 @@ import com.wedding.backend.dto.customer.rating.AverageRatingPoint;
 import com.wedding.backend.dto.customer.rating.RatingDto;
 import com.wedding.backend.dto.customer.rating.RatingWithGroup;
 import com.wedding.backend.entity.RatingEntity;
-import com.wedding.backend.entity.ServiceEntity;
 import com.wedding.backend.entity.UserEntity;
 import com.wedding.backend.mapper.RatingMapper;
 import com.wedding.backend.repository.RatingRepository;

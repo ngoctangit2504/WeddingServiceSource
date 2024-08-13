@@ -5,8 +5,6 @@ import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithDataAndCount;
 import com.wedding.backend.common.ModelCommon;
 import com.wedding.backend.dto.customer.comment.CommentPostDto;
-import com.wedding.backend.entity.CommentEntity;
-import com.wedding.backend.entity.ServiceEntity;
 import com.wedding.backend.entity.UserEntity;
 import com.wedding.backend.exception.ResourceNotFoundException;
 import com.wedding.backend.mapper.CommentMapper;
