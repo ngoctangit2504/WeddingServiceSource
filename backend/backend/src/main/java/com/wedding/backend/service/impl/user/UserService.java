@@ -5,7 +5,6 @@ import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithData;
 import com.wedding.backend.base.BaseResultWithDataAndCount;
 import com.wedding.backend.common.ModelCommon;
-import com.wedding.backend.dto.auth.LoginResponse;
 import com.wedding.backend.dto.auth.OTPValidationRequestDto;
 import com.wedding.backend.dto.user.UpdateProfileRequest;
 import com.wedding.backend.dto.user.UserStatus;

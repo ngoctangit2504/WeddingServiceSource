@@ -2,7 +2,6 @@ package com.wedding.backend.controller.auth;
 
 import com.wedding.backend.dto.auth.LoginDTO;
 import com.wedding.backend.dto.auth.OTPValidationRequestDto;
-import com.wedding.backend.dto.auth.RegisterDTO;
 import com.wedding.backend.service.IService.auth.IAuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
