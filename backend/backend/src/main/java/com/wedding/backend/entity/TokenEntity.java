@@ -1,7 +1,6 @@
 package com.wedding.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.wedding.backend.dto.auth.TokenTypeDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

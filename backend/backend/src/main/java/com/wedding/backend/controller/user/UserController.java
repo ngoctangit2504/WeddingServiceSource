@@ -1,7 +1,6 @@
 package com.wedding.backend.controller.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wedding.backend.dto.auth.OTPRequestDto;
 import com.wedding.backend.dto.auth.OTPValidationRequestDto;
 import com.wedding.backend.dto.user.UpdateProfileRequest;
 import com.wedding.backend.service.IService.user.IUserService;

@@ -1,7 +1,6 @@
 package com.wedding.backend.util.handler;
 
 
-import com.wedding.backend.dto.auth.TokenTypeDTO;
 import com.wedding.backend.entity.TokenEntity;
 import com.wedding.backend.entity.UserEntity;
 import com.wedding.backend.repository.TokenRepository;
