@@ -2,7 +2,6 @@ package com.wedding.backend.mapper;
 
 
 import com.wedding.backend.dto.servicePackage.ServicePackageDto;
-import com.wedding.backend.entity.ServicePackageEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
