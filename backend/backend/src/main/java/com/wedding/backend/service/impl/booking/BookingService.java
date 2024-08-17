@@ -3,7 +3,6 @@ package com.wedding.backend.service.impl.booking;
 import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithDataAndCount;
 import com.wedding.backend.dto.bookingService.BookingServiceDTO;
-import com.wedding.backend.entity.ServiceEntity;
 import com.wedding.backend.entity.SupplierEntity;
 import com.wedding.backend.entity.UserEntity;
 import com.wedding.backend.exception.ResourceNotFoundException;

@@ -3,7 +3,6 @@ package com.wedding.backend.service.impl.customer;
 
 import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.dto.service.ServiceByWishList;
-import com.wedding.backend.entity.ServiceEntity;
 import com.wedding.backend.entity.UserEntity;
 import com.wedding.backend.entity.WishlistEntity;
 import com.wedding.backend.entity.WishlistItemEntity;
