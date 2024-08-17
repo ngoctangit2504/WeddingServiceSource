@@ -4,8 +4,6 @@ import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.common.ModelCommon;
 import com.wedding.backend.common.StatusCommon;
 import com.wedding.backend.dto.auth.*;
-import com.wedding.backend.entity.RoleEntity;
-import com.wedding.backend.entity.TokenEntity;
 import com.wedding.backend.entity.UserEntity;
 import com.wedding.backend.repository.RoleRepository;
 import com.wedding.backend.repository.TokenRepository;

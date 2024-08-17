@@ -1,6 +1,5 @@
 package com.wedding.backend.dto.user;
 
-import com.wedding.backend.entity.RoleEntity;
 import lombok.Getter;
 import lombok.Setter;
 

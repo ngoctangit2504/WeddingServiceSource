@@ -2,7 +2,6 @@ package com.wedding.backend.service.impl.auth;
 
 import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.dto.auth.RoleDTO;
-import com.wedding.backend.entity.RoleEntity;
 import com.wedding.backend.mapper.RoleMapper;
 import com.wedding.backend.repository.RoleRepository;
 import com.wedding.backend.service.IService.auth.IRoleService;
