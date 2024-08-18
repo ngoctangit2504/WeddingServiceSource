@@ -1,7 +1,6 @@
 package com.wedding.backend.repository;
 
 import com.wedding.backend.dto.bookingService.BookingServicesBySupplier;
-import com.wedding.backend.entity.BookingEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
