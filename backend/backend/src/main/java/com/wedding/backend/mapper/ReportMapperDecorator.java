@@ -2,7 +2,6 @@ package com.wedding.backend.mapper;
 
 
 import com.wedding.backend.dto.report.ReportDto;
-import com.wedding.backend.entity.ReportEntity;
 import com.wedding.backend.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
