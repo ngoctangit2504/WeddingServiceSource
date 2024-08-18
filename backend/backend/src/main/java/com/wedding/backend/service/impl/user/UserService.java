@@ -12,7 +12,6 @@ import com.wedding.backend.dto.auth.ResponseSendOTP;
 import com.wedding.backend.dto.user.UpdateProfileRequest;
 import com.wedding.backend.dto.user.UserDTO;
 import com.wedding.backend.dto.user.UserStatus;
-import com.wedding.backend.entity.RoleEntity;
 import com.wedding.backend.entity.UserEntity;
 import com.wedding.backend.exception.ResourceNotFoundException;
 import com.wedding.backend.mapper.UserMapper;
