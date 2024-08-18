@@ -1,6 +1,5 @@
 package com.wedding.backend.repository.payment;
 
-import com.wedding.backend.entity.PaymentEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

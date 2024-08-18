@@ -1,7 +1,6 @@
 package com.wedding.backend.mapper;
 
 import com.wedding.backend.dto.payment.PaymentDtoMapper;
-import com.wedding.backend.entity.PaymentEntity;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 
