@@ -2,7 +2,6 @@ package com.wedding.backend.service.impl.twilio;
 
 import com.twilio.type.PhoneNumber;
 import com.wedding.backend.common.StatusCommon;
-import com.wedding.backend.config.TwilioConfig;
 import com.wedding.backend.dto.auth.OTPValidationRequestDto;
 import com.wedding.backend.util.message.MessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;

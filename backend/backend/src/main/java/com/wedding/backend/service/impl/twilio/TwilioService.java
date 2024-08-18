@@ -3,7 +3,6 @@ package com.wedding.backend.service.impl.twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 import com.wedding.backend.common.StatusCommon;
-import com.wedding.backend.config.TwilioConfig;
 import com.wedding.backend.service.IService.twilio.ITwilioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
