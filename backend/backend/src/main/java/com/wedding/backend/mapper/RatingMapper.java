@@ -1,7 +1,6 @@
 package com.wedding.backend.mapper;
 
 import com.wedding.backend.dto.customer.rating.RatingDto;
-import com.wedding.backend.entity.RatingEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
