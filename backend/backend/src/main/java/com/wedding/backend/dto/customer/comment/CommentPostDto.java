@@ -3,7 +3,6 @@ package com.wedding.backend.dto.customer.comment;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wedding.backend.dto.user.PartUser;
-import com.wedding.backend.entity.ServiceEntity;
 import com.wedding.backend.entity.UserEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

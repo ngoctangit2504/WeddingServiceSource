@@ -3,7 +3,6 @@ package com.wedding.backend.service.impl.service;
 import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithDataAndCount;
 import com.wedding.backend.dto.servicePackage.ServicePackageDto;
-import com.wedding.backend.entity.ServicePackageEntity;
 import com.wedding.backend.mapper.ServicePackageMapper;
 import com.wedding.backend.repository.ServicePackageRepository;
 import com.wedding.backend.service.IService.service.IServicePackage;
