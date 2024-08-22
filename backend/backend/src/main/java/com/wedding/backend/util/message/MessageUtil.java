@@ -37,9 +37,16 @@ public class MessageUtil {
     public static final String MSG_BALANCE_NOT_ENOUGH = "Hiện tại, Số dư của bạn không đủ để thực hiện giao dịch.";
     public static final String MSG_SERVICE_EXISTS = "Dịch vụ tồn tại!";
     public static final String SUPPLIER_NOT_FOUND = "Nhà cung cấp không tồn tại!";
-    public static final String MSG_SEND_BOOKING_SUCCESS = "Gửi báo giá thành công";
+    public static final String MSG_SEND_BOOKING_SUCCESS = "Gửi yêu cầu thành công. Nhà cung cấp sẽ sớm liên hệ với bạn";
     public static final String ADD_REPORT_SUCCESS = "Cam on thong tin bao cao dich vu cua ban";
-    public static final String MSG_SUCCESS = "Success";
-    public static final String UPDATE_STATUS_SERVICE_SUCCESS = "Cap nhat trang thai dich vu thanh cong!";
+    public static final String MSG_SUCCESS = "Thành công";
+    public static final String UPDATE_STATUS_SERVICE_SUCCESS = "Cập nhật trạng thái dịch vụ thành công.";
     public static final String MSG_ID_FORMAT_INVALID = "Mã sai định dạng !";
+    public static final String USER_NOT_FOLLOWING_SUPPLIER = "Người dùng chưa theo dõi nhà cung cấp này!";
+    public static final String UNFOLLOWING_SUCCESS = "Bạn đã hủy theo dõi";
+    public static final String MSG_FOUND_BOOKING = "Chúng tôi đã nhận được yêu cầu báo giá của bạn.";
+    public static final String BOOKING_NOT_FOUND = "Khong tim thay bao gia";
+    public static final String MSG_SERVICE_LIMIT_OF_PACKAGE_VIP = "Bạn đã đạt đến giới hạn số lượng dịch vụ cho phép trong gói VIP của mình. Vui lòng nâng cấp gói hoặc liên hệ với bộ phận hỗ trợ để biết thêm chi tiết.";
+    public static final String MSG_STATUS_SERVICE_NOT_APPROVED = "Bạn không thể chọn các dịch vụ chưa được phê duyệt.";
+    public static final String TRANSACTION_PACKAGE_NOT_FOUND = "Giao dịch không tìm thấy";
 }

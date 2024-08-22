@@ -102,6 +102,14 @@ public class GuestController {
         return ResponseEntity.ok(service.getServiceByPackageVIP(pageable, packageId));
     }
 
+
+    @GetMapping("/service/services-by-package-VIP1-VIP2")
+    public ResponseEntity<?> getServicesByPackageVIP1AndVIP2(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+                                                             @RequestParam(name = "size", required = false, defaultValue = "5") Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(service.getServiceByPackageVIP1AndVIP2(pageable));
+    }
+
     @PostMapping(value = "/report/add")
     public ResponseEntity<?> addReport(@RequestBody ReportDto reportDto) {
         return ResponseEntity.ok(reportService.addReport(reportDto));
@@ -124,7 +132,6 @@ public class GuestController {
     public ResponseEntity<?> serviceTypeNameBySupplier(@PathVariable(name = "supplierId") Long supplierId) {
         return ResponseEntity.ok(serviceType.serviceTypeNameBySupplier(supplierId));
     }
-
 
 
 }

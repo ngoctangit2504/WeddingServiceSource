@@ -1,6 +1,7 @@
 package com.wedding.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.wedding.backend.common.StatusCommon;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,6 +24,9 @@ public class BookingEntity extends BaseEntityWithIDIncrement {
     private String phoneNumber;
     @Column(name = "note")
     private String notes;
+
+    @Enumerated(EnumType.STRING)
+    private StatusCommon status;
 
     @JsonManagedReference
     @ManyToOne()

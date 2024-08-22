@@ -8,6 +8,7 @@ import com.wedding.backend.entity.ServicePackageEntity;
 import com.wedding.backend.entity.SupplierEntity;
 import com.wedding.backend.entity.TransactionEntity;
 import com.wedding.backend.repository.ServicePackageRepository;
+import com.wedding.backend.repository.ServiceRepository;
 import com.wedding.backend.repository.SupplierRepository;
 import com.wedding.backend.util.validator.PhoneNumberValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,16 @@ public abstract class TransactionMapperDecorator implements TransactionMapper {
     @Autowired
     private ServicePackageRepository servicePackageRepository;
 
+    @Autowired
+    private ServiceRepository serviceRepository;
+
     @Override
     public TransactionDto entityToDto(TransactionEntity transaction) {
         TransactionDto transactionDto = delegate.entityToDto(transaction);
         Optional<SupplierEntity> user = supplierRepository.findById(transaction.getUserTransaction().getId());
         Optional<ServicePackageEntity> servicePackage = servicePackageRepository.findById(transaction.getServicePackage().getId());
+        Long serviceLimitResponse = serviceRepository.countBySupplier_IdAndIsSelected(transaction.getUserTransaction().getId(), true);
+//
         if (user.isPresent()) {
             PartSupplier partUser = PartSupplier.builder()
                     .supplierId(user.get().getId())
@@ -40,13 +46,15 @@ public abstract class TransactionMapperDecorator implements TransactionMapper {
                     .build();
             transactionDto.setPartSupplier(partUser);
         }
-        if(servicePackage.isPresent()){
+        if (servicePackage.isPresent()) {
             PartServicePackage partServicePackage = PartServicePackage.builder()
                     .servicePackageId(servicePackage.get().getId())
                     .servicePackageName(servicePackage.get().getName())
                     .durationDays(servicePackage.get().getDurationDays())
                     .price(servicePackage.get().getPrice())
                     .createdDate(servicePackage.get().getCreatedDate())
+                    .serviceLimit(servicePackage.get().getServiceLimit())
+                    .serviceSelected(serviceLimitResponse)
                     .build();
             transactionDto.setPartServicePackage(partServicePackage);
         }

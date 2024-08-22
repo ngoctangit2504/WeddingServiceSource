@@ -84,4 +84,9 @@ public class SupplierController {
 
         return ResponseEntity.ok(transactionService.getAllTransactionServiceByUser(connectedUser, pageable));
     }
+
+    @PatchMapping(value = "/transaction/is-expired")
+    public ResponseEntity<?> checkTransactionServicePackageIsExpired(Principal connectedUser){
+        return ResponseEntity.ok(transactionService.checkTransactionServicePackageIsExpired(connectedUser));
+    }
 }

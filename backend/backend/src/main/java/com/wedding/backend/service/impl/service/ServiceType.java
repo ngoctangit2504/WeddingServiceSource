@@ -9,6 +9,7 @@ import com.wedding.backend.mapper.ServiceTypeMapper;
 import com.wedding.backend.repository.ServiceTypeRepository;
 import com.wedding.backend.service.IService.service.IServiceType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,5 +47,10 @@ public class ServiceType implements IServiceType {
             throw new ResourceNotFoundException(ex.getMessage());
         }
         return result;
+    }
+
+    @Override
+    public ResponseEntity<?> upsertServiceType() {
+        return null;
     }
 }

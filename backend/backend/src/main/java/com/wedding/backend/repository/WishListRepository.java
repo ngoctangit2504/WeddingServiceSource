@@ -22,12 +22,12 @@ public interface WishListRepository extends JpaRepository<WishlistEntity, Long> 
             "where w.wishlist_name =:wishListName and w.user_id =:userId and wi.service_id =:serviceId", nativeQuery = true)
     ExitWishlist wishListItemExit(@Param("wishListName") String wishListName, @Param("serviceId") Long serviceId, @Param("userId") String userId);
 
-    @Query(value = "Select s.id, s.title, s.address, s.created_date as createdDate, s.price, s.image, wi.wishlist_item_id as wishListItemId\n" +
+    @Query(value = "Select s.id, s.title, s.address, s.created_date as createdDate, s.image, wi.wishlist_item_id as wishListItemId\n" +
             "from services as s\n" +
             "inner join wishlist_items as wi on s.id = wi.service_id\n" +
             "inner join wishlists as w on w.wishlist_id = wi.wishlist_id\n" +
             "where w.user_id =:userId  and w.wishlist_name LIKE %:wishListName%\n" +
-            "group by s.id, s.title, s.address, s.created_date, s.price, s.image, wi.wishlist_item_id \n" +
+            "group by s.id, s.title, s.address, s.created_date, s.image, wi.wishlist_item_id \n" +
             "order by wi.wishlist_item_id desc", nativeQuery = true)
     List<ServiceByWishList> getAllWishListByNameAndUser(@Param("wishListName") String wishListName, @Param("userId") String userId, Pageable pageable);
 }

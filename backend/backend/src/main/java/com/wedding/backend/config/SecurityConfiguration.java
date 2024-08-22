@@ -55,7 +55,8 @@ public class SecurityConfiguration {
                                 "/api/v1/role/**",
                                 "/api/v1/payment/**",
                                 "/api/v1/guest/**",
-                                "/api/v1/supplier/getAll"
+                                "/api/v1/supplier/getAll",
+                                "/api/v1/service/suggest-by-follow-or-not"
                         )
                         .permitAll()
                         .anyRequest()

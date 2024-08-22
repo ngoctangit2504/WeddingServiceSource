@@ -13,10 +13,14 @@ import com.wedding.backend.dto.user.UpdateProfileRequest;
 import com.wedding.backend.dto.user.UserDTO;
 import com.wedding.backend.dto.user.UserStatus;
 import com.wedding.backend.entity.RoleEntity;
+import com.wedding.backend.entity.SupplierEntity;
+import com.wedding.backend.entity.SupplierFollowEntity;
 import com.wedding.backend.entity.UserEntity;
 import com.wedding.backend.exception.ResourceNotFoundException;
 import com.wedding.backend.mapper.UserMapper;
 import com.wedding.backend.repository.RoleRepository;
+import com.wedding.backend.repository.SupplierFollowRepository;
+import com.wedding.backend.repository.SupplierRepository;
 import com.wedding.backend.repository.UserRepository;
 import com.wedding.backend.service.IService.user.IUserService;
 import com.wedding.backend.service.impl.auth.JWTService;
@@ -52,6 +56,8 @@ public class UserService implements IUserService {
     private final RoleRepository roleRepository;
     private final JWTService jwtService;
     private final TokenHandler tokenHandler;
+    private final SupplierRepository supplierRepository;
+    private final SupplierFollowRepository supplierFollowRepository;
 
     @Override
     public Optional<UserEntity> findByPhoneNumber(String phoneNumber) {
@@ -212,17 +218,16 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ResponseEntity<?> deleteUserByIds(String[] listId) {
+    public ResponseEntity<?> deleteUserByIds(String listId) {
         ResponseEntity<?> response = null;
-        long count = 0L;
         try {
-            for (String item : listId
-            ) {
-                Optional<UserEntity> user = userRepository.findById(item);
-                user.ifPresent(userEntity -> userEntity.setDeleted(true));
-                count++;
+            Optional<UserEntity> user = userRepository.findById(listId);
+            if (user.isPresent()) {
+                user.get().setDeleted(true);
+                userRepository.save(user.get());
             }
-            response = new ResponseEntity<>(new BaseResult(true, MessageUtil.MSG_DELETE_SUCCESS + " " + count + " tài khoản."), HttpStatus.OK);
+            response = new ResponseEntity<>(new BaseResult(true, MessageUtil.MSG_DELETE_SUCCESS), HttpStatus.OK);
+
         } catch (Exception ex) {
             response = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_SYSTEM_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -261,6 +266,88 @@ public class UserService implements IUserService {
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new BaseResult(false, MessageUtil.MSG_SYSTEM_ERROR));
+        }
+    }
+
+    @Override
+    public BaseResult followSupplier(Long supplierId, Principal connectedUser) {
+        try {
+            var user = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+            if (user != null) {
+                Optional<SupplierEntity> supplier = supplierRepository.findById(supplierId);
+                if (supplier.isPresent()) {
+                    if (supplier.get().getFollowerCount() == null) {
+                        supplier.get().setFollowerCount(0);
+                    }
+                    supplier.get().setFollowerCount(supplier.get().getFollowerCount() + 1);
+                    SupplierFollowEntity supplierFollow = new SupplierFollowEntity();
+                    supplierFollow.setUser(user);
+                    supplierFollow.setSupplierFollow(supplier.get());
+                    supplierFollowRepository.save(supplierFollow);
+                    supplierRepository.save(supplier.get());
+                    return new BaseResult(true, MessageUtil.MSG_ADD_SUCCESS);
+                } else {
+                    return new BaseResult(false, MessageUtil.SUPPLIER_NOT_FOUND);
+                }
+            } else {
+                return new BaseResult(false, MessageUtil.MSG_USER_BY_ID_NOT_FOUND);
+            }
+
+        } catch (Exception ex) {
+            return new BaseResult(false, ex.getMessage());
+        }
+    }
+
+    @Override
+    public BaseResult unFollowSupplier(Long supplierId, Principal connectedUser) {
+        try {
+            var user = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+            if (user != null) {
+                Optional<SupplierEntity> supplier = supplierRepository.findById(supplierId);
+                if (supplier.isPresent()) {
+                    Optional<SupplierFollowEntity> supplierFollow = supplierFollowRepository.findByUser_IdAndSupplierFollow_id(user.getId(), supplier.get().getId());
+                    if (supplierFollow.isPresent()) {
+                        supplierFollowRepository.delete(supplierFollow.get());
+                        supplier.get().setFollowerCount(supplier.get().getFollowerCount() - 1);
+                        supplierRepository.save(supplier.get());
+                        return new BaseResult(true, MessageUtil.UNFOLLOWING_SUCCESS);
+                    } else {
+                        return new BaseResult(false, MessageUtil.USER_NOT_FOLLOWING_SUPPLIER);
+                    }
+                } else {
+                    return new BaseResult(false, MessageUtil.SUPPLIER_NOT_FOUND);
+                }
+            } else {
+                return new BaseResult(false, MessageUtil.MSG_USER_BY_ID_NOT_FOUND);
+            }
+
+        } catch (Exception ex) {
+            return new BaseResult(false, ex.getMessage());
+        }
+    }
+
+    @Override
+    public ResponseEntity<Boolean> checkUserIsFollowSupplier(Long supplierId, Principal connectedUser) {
+        try {
+            var user = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+            if (user != null) {
+                Optional<SupplierEntity> supplier = supplierRepository.findById(supplierId);
+                if (supplier.isPresent()) {
+                    Optional<SupplierFollowEntity> supplierFollow = supplierFollowRepository.findByUser_IdAndSupplierFollow_id(user.getId(), supplier.get().getId());
+                    if (supplierFollow.isPresent()) {
+                        return new ResponseEntity<>(true, HttpStatus.OK);
+                    } else {
+                        return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+                    }
+                } else {
+                    return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+                }
+            } else {
+                return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+            }
+
+        } catch (Exception ex) {
+            return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

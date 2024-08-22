@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,7 @@ import java.security.Principal;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/user")
+@PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPLIER', 'ROLE_ADMIN')")
 @CrossOrigin("*")
 public class UserController {
 
@@ -40,7 +42,7 @@ public class UserController {
 
     @PostMapping(value = "/update-profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> updateProfile(@RequestParam(name = "profileRequest") String profileRequest,
-                                           @RequestPart (required = false, name = "profileImage") @Valid MultipartFile profileImage, Principal connectedUser) throws IOException {
+                                           @RequestPart(required = false, name = "profileImage") @Valid MultipartFile profileImage, Principal connectedUser) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper();
         UpdateProfileRequest profile = objectMapper.readValue(profileRequest, UpdateProfileRequest.class);
@@ -57,9 +59,25 @@ public class UserController {
     public ResponseEntity<?> sendOTP(@RequestBody OTPRequestDto requestDto) {
         return userService.sendOTP(requestDto);
     }
+
     @PostMapping("/up-to-role-manage")
     public ResponseEntity<?> upRoleUserToManage(@RequestBody OTPValidationRequestDto otpValidationRequestDto, Principal connectedUser) {
         return userService.upRoleToManage(otpValidationRequestDto, connectedUser);
     }
 
+    @PostMapping("/follow-supplier/{supplierId}")
+    public ResponseEntity<?> followSupplier(@PathVariable(name = "supplierId") Long supplierId, Principal connectedUser) {
+        return ResponseEntity.ok(userService.followSupplier(supplierId, connectedUser));
+    }
+
+
+    @PostMapping("/unfollow-supplier/{supplierId}")
+    public ResponseEntity<?> unFollowSupplier(@PathVariable(name = "supplierId") Long supplierId, Principal connectedUser) {
+        return ResponseEntity.ok(userService.unFollowSupplier(supplierId, connectedUser));
+    }
+
+    @GetMapping("/check-user-is-follow-supplier/{supplierId}")
+    public ResponseEntity<?> checkUserIsFollowSupplier(@PathVariable(name = "supplierId") Long supplierId, Principal connectedUser){
+        return ResponseEntity.ok(userService.checkUserIsFollowSupplier(supplierId, connectedUser));
+    }
 }

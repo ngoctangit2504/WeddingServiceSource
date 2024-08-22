@@ -6,6 +6,7 @@ import com.wedding.backend.base.BaseResultWithDataAndCount;
 import com.wedding.backend.common.StatusCommon;
 import com.wedding.backend.dto.payment.PaymentByMonthDto;
 import com.wedding.backend.dto.service.*;
+import com.wedding.backend.dto.supplier.ServiceLimitResponse;
 import com.wedding.backend.entity.*;
 import com.wedding.backend.exception.ResourceNotFoundException;
 import com.wedding.backend.mapper.ServiceMapper;
@@ -139,6 +140,8 @@ public class Service implements IService {
                 // Insert new service
                 service = new ServiceEntity();
                 supplier.ifPresent(service::setSupplier);
+                service.setSelected(false);
+                service.setDeleted(false); // Might want to check if this should only be set on creation
             } else {
                 // Update existing service
                 Optional<ServiceEntity> optionalService = repository.findById(serviceDTO.getId());
@@ -156,7 +159,7 @@ public class Service implements IService {
             service.setLinkWebsite(serviceDTO.getLinkWebsite());
             service.setLinkFacebook(serviceDTO.getLinkFacebook());
             service.setRotation(serviceDTO.getRotation());
-            service.setDeleted(false); // Might want to check if this should only be set on creation
+
             service.setStatus(isNewService ? StatusCommon.REVIEW : service.getStatus());
 
             Optional<ServiceTypeEntity> serviceType = serviceTypeRepository.findById(serviceDTO.getServiceTypeId());
@@ -227,6 +230,20 @@ public class Service implements IService {
         try {
             List<ServiceByPackageDTO> dataFromDb = repository.serviceByPackageId(packageId, pageable);
             result.set(dataFromDb, (long) dataFromDb.size());
+        } catch (Exception ex) {
+            throw new ResourceNotFoundException(ex.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public BaseResultWithDataAndCount<?> getServiceByPackageVIP1AndVIP2(Pageable pageable) {
+        BaseResultWithDataAndCount<List<ServiceByPackageDTO>> result = new BaseResultWithDataAndCount<>();
+        try {
+            List<ServiceByPackageDTO> dataVIP1FromDb = repository.serviceByPackageId(pageable);
+
+
+            result.set(dataVIP1FromDb, (long) dataVIP1FromDb.size());
         } catch (Exception ex) {
             throw new ResourceNotFoundException(ex.getMessage());
         }
@@ -329,4 +346,75 @@ public class Service implements IService {
         }
         return responseEntity;
     }
+
+    @Override
+    public BaseResult updateServiceSelected(Long serviceId) {
+        try {
+            Optional<ServiceEntity> service = repository.findById(serviceId);
+            if (service.isPresent()) {
+                if (service.get().isSelected()) {
+                    service.get().setSelected(false);
+                } else if (service.get().getStatus().equals(StatusCommon.REVIEW) || service.get().getStatus().equals(StatusCommon.REJECTED)) {
+                    return new BaseResult(false, MessageUtil.MSG_STATUS_SERVICE_NOT_APPROVED);
+                } else {
+                    Long countServiceSelected = repository.countBySupplier_IdAndIsSelected(service.get().getSupplier().getId(), true);
+                    ServiceLimitResponse serviceLimitOfPackageVIP = supplierRepository.getServiceLimitOfPackageVIP(service.get().getSupplier().getId());
+                    if (countServiceSelected < serviceLimitOfPackageVIP.getServiceLimit()) {
+                        service.get().setSelected(true);
+                    } else {
+                        return new BaseResult(false, MessageUtil.MSG_SERVICE_LIMIT_OF_PACKAGE_VIP);
+                    }
+                }
+                repository.save(service.get());
+                return new BaseResult(true, MessageUtil.MSG_UPDATE_SUCCESS);
+            } else {
+                return new BaseResult(false, MessageUtil.MSG_SERVICE_NOT_FOUND);
+            }
+        } catch (Exception ex) {
+            return new BaseResult(false, ex.getMessage());
+        }
+    }
+
+    @Override
+    public BaseResultWithDataAndCount<List<ServiceBySuggest>> serviceByUserFollowingSupplier(Principal connectedUser, Pageable pageable) {
+        BaseResultWithDataAndCount<List<ServiceBySuggest>> result = new BaseResultWithDataAndCount<>();
+        try {
+            List<ServiceBySuggest> dataFromDb;
+
+            // Nếu có người dùng kết nối: dang nhap roi
+            if (connectedUser != null) {
+                var user = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+
+                // Kiểm tra nếu không có thông tin người dùng
+                if (user == null) {
+                    throw new ResourceNotFoundException(MessageUtil.MSG_USER_BY_TOKEN_NOT_FOUND);
+                }
+
+                // Lấy dịch vụ từ các nhà cung cấp mà người dùng theo dõi
+                dataFromDb = repository.serviceByUserFollowingSupplier(user.getId(), pageable);
+
+                // Nếu không có dịch vụ nào từ nhà cung cấp mà người dùng theo dõi, lấy dịch vụ dựa trên xếp hạng trung bình
+                if (dataFromDb.isEmpty()) {
+                    dataFromDb = repository.serviceByAverageRating(pageable);
+                }
+            } else {
+                // Nếu người dùng không đăng nhập, chỉ lấy dịch vụ dựa trên xếp hạng trung bình
+                dataFromDb = repository.serviceByAverageRating(pageable);
+            }
+
+            // Đặt kết quả và số lượng dữ liệu trả về
+            result.set(dataFromDb, (long) dataFromDb.size());
+
+        } catch (ResourceNotFoundException ex) {
+            // Xử lý ngoại lệ cụ thể
+            throw ex;
+        } catch (Exception ex) {
+            // Xử lý ngoại lệ chung
+            throw new ResourceNotFoundException("An error occurred while fetching services: " + ex.getMessage());
+        }
+
+        return result;
+    }
+
+
 }

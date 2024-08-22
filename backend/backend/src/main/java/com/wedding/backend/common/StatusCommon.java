@@ -8,5 +8,7 @@ public enum StatusCommon {
     OPEN,
     REVIEW,
     APPROVED,
-    REJECTED
+    REJECTED,
+    PROCESS,
+    SUCCESS
 }

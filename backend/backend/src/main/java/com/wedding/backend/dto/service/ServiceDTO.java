@@ -15,10 +15,10 @@ public class ServiceDTO {
     private Long id;
     private String title;
     private String image;
-    private String price;
     private String address;
     private boolean isDeleted;
     private String status;
     private ServiceTypeEntity serviceType;
+    private boolean isSelected;
     private Date createdDate;
 }

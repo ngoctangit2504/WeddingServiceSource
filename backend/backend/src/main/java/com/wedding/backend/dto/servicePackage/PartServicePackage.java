@@ -21,5 +21,9 @@ public class PartServicePackage {
 
     private BigDecimal price;
 
+    private Integer serviceLimit;
+
+    private Long serviceSelected;
+
     private Date createdDate;
 }

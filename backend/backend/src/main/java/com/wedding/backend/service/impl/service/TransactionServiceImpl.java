@@ -256,4 +256,33 @@ public class TransactionServiceImpl implements ITransactionService {
         }
         return response;
     }
+
+    @Override
+    public ResponseEntity<?> checkTransactionServicePackageIsExpired(Principal connectedUser) {
+        try {
+            UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+            if (user == null) {
+                return new ResponseEntity<>(MessageUtil.MSG_USER_BY_TOKEN_NOT_FOUND, HttpStatus.NOT_FOUND);
+            }
+
+            SupplierEntity supplier = supplierRepository.findByUser_Id(user.getId())
+                    .orElseThrow(() -> new RuntimeException(MessageUtil.SUPPLIER_NOT_FOUND));
+
+            TransactionEntity transactionEntity = transactionRepository.findByUserTransaction_IdAndExpiredFalse(supplier.getId())
+                    .orElseThrow(() -> new RuntimeException(MessageUtil.TRANSACTION_PACKAGE_NOT_FOUND));
+
+            if (transactionEntity.getExpirationDate().before(new Date())) {
+                transactionEntity.setExpired(true);
+                transactionRepository.save(transactionEntity);
+            }
+
+            return new ResponseEntity<>(MessageUtil.MSG_OK, HttpStatus.OK);
+
+        } catch (RuntimeException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

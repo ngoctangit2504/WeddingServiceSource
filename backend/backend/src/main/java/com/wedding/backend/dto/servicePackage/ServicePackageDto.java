@@ -20,6 +20,8 @@ public class ServicePackageDto {
 
     private Integer durationDays;
 
+    private Integer serviceLimit;
+
     private BigDecimal price;
 
     private Date createdDate;

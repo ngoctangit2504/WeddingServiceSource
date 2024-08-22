@@ -1,5 +1,6 @@
 package com.wedding.backend.service.impl.twilio;
 
+import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 import com.wedding.backend.common.StatusCommon;
 import com.wedding.backend.config.TwilioConfig;
@@ -30,7 +31,7 @@ public class TwilioOTPService {
             String otp = generateOTP();
             String otpMessage = "Kính gửi Quý khách hàng, Mã OTP của bạn là " + otp + " để xác nhận. Cảm ơn bạn.";
             System.out.println(otpMessage);
-            // Message message = Message.creator(to, from, otpMessage).create();
+            Message message = Message.creator(to, from, otpMessage).create();
             otpMap.put(otpRequest.getUserName(), otp);
             responseSendOTP = new ResponseSendOTP(StatusCommon.DELIVERED, MessageUtil.MSG_SEND_OTP_DELIVERED);
         } catch (Exception e) {

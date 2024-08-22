@@ -89,6 +89,10 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @JsonManagedReference
     private List<WishlistEntity> wishlists;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<SupplierFollowEntity> supplierFollows;
+
     @JsonBackReference
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private SupplierEntity suppliers;

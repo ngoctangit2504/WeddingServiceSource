@@ -3,6 +3,7 @@ package com.wedding.backend.repository;
 import com.wedding.backend.common.StatusCommon;
 import com.wedding.backend.dto.service.ImageAlbDTO;
 import com.wedding.backend.dto.service.ServiceByPackageDTO;
+import com.wedding.backend.dto.service.ServiceBySuggest;
 import com.wedding.backend.dto.service.ServiceDetail;
 import com.wedding.backend.entity.ServiceEntity;
 import com.wedding.backend.entity.ServiceTypeEntity;
@@ -57,14 +58,114 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
                     "    INNER JOIN transaction AS t ON t.supplier_id = sup.id\n" +
                     "    WHERE t.package_id =:packageId \n" +
                     "      AND s.status = 'APPROVED' \n" +
-                    "      AND s.is_deleted = FALSE\n" +
+                    "      AND s.is_deleted = FALSE and s.is_selected = true and t.expired = false\n" +
                     ")\n" +
                     "SELECT *\n" +
                     "FROM RankedServices\n" +
                     "WHERE rn <= 5\n" +
-                    "ORDER BY supplierId, purchaseDate DESC", nativeQuery = true
+                    "ORDER BY purchaseDate DESC", nativeQuery = true
     )
     List<ServiceByPackageDTO> serviceByPackageId(@Param("packageId") Long packageId, Pageable pageable);
+
+    @Query(
+            value = "WITH RankedServices AS (\n" +
+                    "    SELECT \n" +
+                    "        s.id, \n" +
+                    "        s.title, \n" +
+                    "        s.image, \n" +
+                    "        s.address, \n" +
+                    "        s.created_date AS createdDate, \n" +
+                    "        t.purchase_date AS purchaseDate,\n" +
+                    "        s.supplier_id AS supplierId,\n" +
+                    "        t.package_id AS packageId,\n" +
+                    "        ROW_NUMBER() OVER (PARTITION BY s.supplier_id ORDER BY s.created_date DESC) AS rn\n" +
+                    "    FROM services AS s\n" +
+                    "    INNER JOIN supplier AS sup ON s.supplier_id = sup.id\n" +
+                    "    INNER JOIN transaction AS t ON t.supplier_id = sup.id\n" +
+                    "    WHERE (t.package_id = 1 OR t.package_id = 2)\n" +
+                    "      AND s.status = 'APPROVED' \n" +
+                    "      AND s.is_deleted = FALSE \n" +
+                    "      AND s.is_selected = TRUE \n" +
+                    "      AND t.expired = FALSE\n" +
+                    ")\n" +
+                    "SELECT *\n" +
+                    "FROM RankedServices\n" +
+                    "WHERE rn <= 5\n" +
+                    "ORDER BY \n" +
+                    "    packageId DESC,\n" +
+                    "    CASE\n" +
+                    "        WHEN packageId = 2 THEN purchaseDate\n" +
+                    "        ELSE NULL\n" +
+                    "    END ASC,        \n" +
+                    "    supplierId", nativeQuery = true
+    )
+    List<ServiceByPackageDTO> serviceByPackageId(Pageable pageable);
+
+
+    @Query(
+            value = "WITH ServicesWithAverageRating AS (\n" +
+                    "    SELECT \n" +
+                    "        s.id,\n" +
+                    "        s.title,\n" +
+                    "        s.image,\n" +
+                    "        s.address,\n" +
+                    "        s.created_date,\n" +
+                    "        sup.id as supplierId,\n" +
+                    "        AVG(r.star_point) as averageRating\n" +
+                    "    FROM \n" +
+                    "        user_supplier_follow AS fl\n" +
+                    "    INNER JOIN \n" +
+                    "        supplier AS sup ON fl.supplier_id = sup.id\n" +
+                    "    INNER JOIN \n" +
+                    "        services AS s ON sup.id = s.supplier_id\n" +
+                    "    LEFT JOIN \n" +
+                    "        ratings r ON s.id = r.service_id\n" +
+                    "    WHERE \n" +
+                    "        fl.user_id =:userId\n" +
+                    "        AND s.status = 'APPROVED'\n" +
+                    "        AND s.is_deleted = FALSE\n" +
+                    "    GROUP BY \n" +
+                    "        s.id, s.title, s.image, s.address, s.created_date, sup.id\n" +
+                    "),\n" +
+                    "RankedFollowedServices AS (\n" +
+                    "    SELECT \n" +
+                    "        id,\n" +
+                    "        title,\n" +
+                    "        image,\n" +
+                    "        address,\n" +
+                    "        created_date,\n" +
+                    "        supplierId,\n" +
+                    "        averageRating,\n" +
+                    "        ROW_NUMBER() OVER (PARTITION BY supplierId ORDER BY created_date DESC) AS rn\n" +
+                    "    FROM \n" +
+                    "        ServicesWithAverageRating\n" +
+                    ")\n" +
+                    "SELECT \n" +
+                    "    id, \n" +
+                    "    title, \n" +
+                    "    image, \n" +
+                    "    address, \n" +
+                    "    created_date  as createdDate,\n" +
+                    "    averageRating\n" +
+                    "FROM \n" +
+                    "    RankedFollowedServices\n" +
+                    "WHERE \n" +
+                    "    rn <= 4\n" +
+                    "ORDER BY \n" +
+                    "    supplierId, createdDate DESC\n", nativeQuery = true
+    )
+    List<ServiceBySuggest> serviceByUserFollowingSupplier(@Param("userId") String userId, Pageable pageable);
+
+
+    @Query(
+            value = "Select p.id, p.title, p.address, p.created_date as createdDate, p.image, AVG(r.star_point) as averageRating\n" +
+                    "from services p\n" +
+                    "left join ratings r on p.id = r.service_id\n" +
+                    "where p.status like 'Approved' and p.is_deleted = false\n" +
+                    "group by p.id\n" +
+                    "Order by averageRating desc", nativeQuery = true
+    )
+    List<ServiceBySuggest> serviceByAverageRating(Pageable pageable);
 
 
     @Query(value = "SELECT Month(t.purchase_date) as month, SUM(sp.price) as tolalPrice \n" +
@@ -79,5 +180,7 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
     Long countByStatus(StatusCommon status);
 
     Long countByIsDeletedFalseAndStatus(StatusCommon status);
+
+    Long countBySupplier_IdAndIsSelected(Long supplierId, boolean selected);
 
 }

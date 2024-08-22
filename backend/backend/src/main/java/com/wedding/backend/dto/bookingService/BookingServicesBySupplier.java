@@ -1,5 +1,7 @@
 package com.wedding.backend.dto.bookingService;
 
+import com.wedding.backend.common.StatusCommon;
+
 import java.util.Date;
 
 public interface BookingServicesBySupplier {
@@ -18,4 +20,6 @@ public interface BookingServicesBySupplier {
     Long getServiceId();
 
     String getTitleService();
+
+    StatusCommon getStatus();
 }

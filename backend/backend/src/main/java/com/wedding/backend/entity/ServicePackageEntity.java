@@ -32,6 +32,9 @@ public class ServicePackageEntity extends BaseEntityWithIDIncrement {
     @Column(name = "is_active")
     private boolean isActive;
 
+    @Column(name = "service_limit")
+    private Integer serviceLimit; // để lưu số lượng dịch vụ có thể đăng
+
     @OneToMany(mappedBy = "servicePackage")
     @JsonManagedReference
     private List<TransactionEntity> transactionEntities = new ArrayList<>();

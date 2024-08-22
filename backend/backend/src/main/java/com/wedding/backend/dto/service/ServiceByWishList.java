@@ -8,7 +8,6 @@ public interface ServiceByWishList {
      String getTitle();
      String getAddress();
      Date getCreatedDate();
-     BigDecimal getPrice();
      String getImage();
      Long getWishListItemId();
 }

@@ -12,4 +12,6 @@ public interface IBookingService {
     BaseResult addBooking(BookingServiceDTO bookingServiceDTO);
 
     BaseResultWithDataAndCount<List<BookingServicesBySupplier>> getBookingServiceBySupplierId(Principal connectedUser);
+
+    BaseResult changeStatusBooking(String status, Long bookingId);
 }

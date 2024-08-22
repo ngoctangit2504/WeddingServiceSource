@@ -26,7 +26,7 @@ public class DatabaseSearch implements IDatabaseSearch {
     public BaseResultWithDataAndCount<List<ServiceDTO>> searchFilter(Pageable pageable, LinkedHashMap<String, Object> map) throws SQLException {
         String url = "jdbc:mysql://localhost:3306/wedding_db";
         String username = "root";
-        String password = "tan686868";
+        String password = "huuthang";
         String tableName = "services";
         String tableJoin = "supplier";
 
@@ -43,7 +43,7 @@ public class DatabaseSearch implements IDatabaseSearch {
         totalResultQuery.append("SELECT count(*) as total FROM ").append(tableName)
                 .append(" inner join supplier as sup on services.supplier_id = sup.id")
                 .append(" where services.is_deleted = false ");
-        filterQuery.append("Select s.id, s.title, s.image, s.address, s.is_deleted, s.status, s.service_type_id, s.created_date, sup.name, sup.id")
+        filterQuery.append("Select s.id, s.title, s.image, s.address, s.is_deleted, s.status, s.service_type_id, s.created_date, s.is_selected, sup.name, sup.id")
                 .append(" from services s")
                 .append(" inner join supplier as sup on s.supplier_id = sup.id")
                 .append(" where s.is_deleted = false");
@@ -80,7 +80,7 @@ public class DatabaseSearch implements IDatabaseSearch {
         }
 
         // Use Group By on filter query
-        filterQuery.append(" group by s.id, s.title, s.image, s.address, s.is_deleted, s.status, s.service_type_id, s.created_date, sup.name, sup.id");
+        filterQuery.append(" group by s.id, s.title, s.image, s.address, s.is_deleted, s.status, s.service_type_id, s.created_date, s.is_selected, sup.name, sup.id");
 
         //Order by Created data DESC
 
@@ -149,6 +149,7 @@ public class DatabaseSearch implements IDatabaseSearch {
                 postDtoWithFilter.setDeleted(rs.getBoolean("is_deleted"));
                 postDtoWithFilter.setStatus(rs.getString("status"));
                 postDtoWithFilter.setImage(rs.getString("image"));
+                postDtoWithFilter.setSelected(rs.getBoolean("is_selected"));
                 Optional<ServiceTypeEntity> serviceType = repository.findById(rs.getLong("service_type_id"));
                 serviceType.ifPresent(postDtoWithFilter::setServiceType);
                 serviceDTO.add(postDtoWithFilter);

@@ -33,8 +33,8 @@ public class SupplierEntity extends BaseEntityWithIDIncrement {
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
-    @Column(name = "follower")
-    private Integer follower;
+    @Column(name = "follower_count")
+    private Integer followerCount;
 
     @JsonManagedReference
     @OneToOne
@@ -47,4 +47,8 @@ public class SupplierEntity extends BaseEntityWithIDIncrement {
     @OneToMany(mappedBy = "userTransaction")
     @JsonManagedReference
     private List<TransactionEntity> transactionEntities;
+
+    @OneToMany(mappedBy = "supplierFollow", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<SupplierFollowEntity> supplierFollows;
 }
