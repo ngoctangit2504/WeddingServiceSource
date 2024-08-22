@@ -7,6 +7,8 @@ import Card from "@/components/posts/Card";
 import { useSelector } from "react-redux";
 import { apiGetServiceBySupplierId, apiGetServiceTypeNameBySupplierId } from "@/apis/service";
 import { apiGetServices } from "@/apis/service";
+import { apifollowSupplier, apiUnfollowSupplier, apiCheckUserIsFollowingSupplier } from "@/apis/supplier";
+
 
 const { TabPane } = Tabs;
 
@@ -73,14 +75,23 @@ const SupplierDetail = () => {
       await apiUnfollowSupplier(supplierId);
       setIsLiked(false);
     } else {
-      await apiFollowSupplier(supplierId);
+      await apifollowSupplier(supplierId);
       setIsLiked(true);
     }
+    await fetchSupplierDetail();
   };
+
+  const checkUserIsFollowSupplier = async () => {
+    var response = await apiCheckUserIsFollowingSupplier(supplierId);
+    if(response.body){
+      setIsLiked(true);
+    }
+  }
 
   useEffect(() => {
     fetchSupplierDetail();
     fetchServiceTypeName();
+    checkUserIsFollowSupplier();
   }, [supplierId]);
 
   useEffect(() => {
@@ -125,7 +136,7 @@ const SupplierDetail = () => {
               </div>
               <div className="flex items-center">
                 <BsFillPeopleFill className="text-2xl mr-4" />
-                Người Theo Dõi: <span className="text-yellow-400 ml-2">{supplier?.follower}</span>
+                Người Theo Dõi: <span className="text-yellow-400 ml-2">{supplier?.followerCount}</span>
               </div>
               <div className="flex items-center">
                 <BsFillStarFill className="text-2xl mr-4" />

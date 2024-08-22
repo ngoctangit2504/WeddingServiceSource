@@ -19,6 +19,7 @@ const PricingItem = ({
   price,
   durationDays,
   servicePackageId,
+  serviceLimit,
   isDisabled
 }) => {
   const dispatch = useDispatch()
@@ -81,6 +82,12 @@ const PricingItem = ({
             <span>Số ngày áp dụng:</span>{" "}
             <span className="text-emerald-700 font-semibold">
               {durationDays + " ngày"}
+            </span>
+          </span>
+          <span>
+            <span>Giới hạn hiển thị dịch vụ:</span>{" "}
+            <span className="text-emerald-700 font-semibold">
+              {serviceLimit + " dịch vụ"}
             </span>
           </span>
           <span>

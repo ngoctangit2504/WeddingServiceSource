@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="w-main mx-auto grid grid-cols-5 gap-4">
         <div className="col-span-1 flex justify-center items-center">
           <span className="text-3xl font-bold tracking-tight">
-            SweetDream.come
+            SweetDream.com
           </span>
         </div>
         <div className="col-span-1 py-6 flex flex-col gap-1">
@@ -52,14 +52,14 @@ const Footer = () => {
             Email: <a href="mailto:sweetdreams@gmail.com">sweetdreams@gmail.com</a>
           </span>
           <span className="flex items-center gap-2 my-2">
-            <a href="https://www.facebook.com/profile.php?id=61553932246952">
+            <a href="#">
               <img
                 src="/fb.svg"
                 alt=""
                 className="w-10 h-10 object-cover border rounded-full"
               />
             </a>
-            <a href="https://www.youtube.com/channel/UCCn5_b5vF5WhE3ACdxz4PLQ">
+            <a href="#">
               <img
                 src="/yt.svg"
                 alt=""

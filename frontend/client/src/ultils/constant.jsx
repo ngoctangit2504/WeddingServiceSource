@@ -70,6 +70,13 @@ export const supplierSidebar = [
     type: "SINGLE",
   },
   {
+    id: 57438,
+    name: "Quản lý gói VIP",
+    path: `/${path.SUPPLIER}/${path.HISTORIES_PAYMENT}`,
+    icon: <MdHistory size={20} />,
+    type: "SINGLE",
+  },
+  {
     id: 1784,
     name: "Yêu cầu báo giá",
     path: `/${path.SUPPLIER}/${path.MANAGE_BOOKING}`,
@@ -90,13 +97,7 @@ export const supplierSidebar = [
     icon: <MdOutlineAttachMoney size={20} />,
     type: "SINGLE",
   },
-  {
-    id: 57438,
-    name: "Lịch sử thanh toán",
-    path: `/${path.SUPPLIER}/${path.HISTORIES_PAYMENT}`,
-    icon: <MdHistory size={20} />,
-    type: "SINGLE",
-  },
+  
   {
     id: 24242,
     name: "Tới Homepage",
@@ -248,6 +249,24 @@ export const statuses = [
     name: "Từ chối",
     label: "Từ chối",
     value: "REJECTED",
+  },
+]
+
+export const statusesBooking = [
+  {
+    name: "Đã liên hệ",
+    label: "Đã liên hệ",
+    value: "SUCCESS",
+  },
+  {
+    name: "Đang xử lý",
+    label: "Đang xử lý",
+    value: "PROCESS",
+  },
+  {
+    name: "Lỗi liên hệ",
+    label: "Lỗi liên hệ",
+    value: "FAILED",
   },
 ]
 export const areaOptions = [

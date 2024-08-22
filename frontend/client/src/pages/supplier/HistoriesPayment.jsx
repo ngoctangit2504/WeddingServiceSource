@@ -35,7 +35,7 @@ const HistoriesPayment = () => {
   }, [searchParams])
   return (
     <>
-      <Title title="Lịch sử thanh toán"></Title>
+      <Title title="Quản lý gói VIP"></Title>
       <div className="p-4">
         <div className="mt-6 w-full">
           <table className="table-auto w-full">
@@ -55,6 +55,9 @@ const HistoriesPayment = () => {
                 </th>
                 <th className="p-2 border font-medium text-center">
                   Ngày hết hạn
+                </th>
+                <th className="p-2 border font-medium text-center">
+                  Dịch vụ hiển thị
                 </th>
                 <th className="p-2 border font-medium text-center">
                   Trạng thái
@@ -81,7 +84,9 @@ const HistoriesPayment = () => {
                   <td className="p-2 text-center">
                     {moment(el.expirationDate).format("DD/MM/YYYY")}
                   </td>
-
+                  <td className="p-2 text-center">
+                    {el.partServicePackage?.serviceSelected}/{el.partServicePackage?.serviceLimit}
+                  </td>
                   <td className="p-2 text-center">
                     {!el.expired ? "Hoạt động" : "Hết hạn"}
                   </td>

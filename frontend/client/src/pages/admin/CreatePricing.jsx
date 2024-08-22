@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import { toast } from "react-toastify"
 import path from "@/ultils/path"
 import WithBaseTopping from "@/hocs/withBaseTopping"
-const CreatePricing = ({navigate}) => {
+const CreatePricing = ({ navigate }) => {
   const {
     register,
     formState: { errors },
@@ -31,7 +31,7 @@ const CreatePricing = ({navigate}) => {
             errors={errors}
             validate={{ required: "Trường này không được bỏ trống" }}
             placeholder="Nhập tên dịch vụ"
-            wrapClassanme="col-span-2"
+            wrapClassanme="col-span-1"
             label="Tên dịch vụ"
           />
           <InputForm
@@ -45,6 +45,16 @@ const CreatePricing = ({navigate}) => {
             type="number"
             readOnly
             value={30}
+          />
+          <InputForm
+            id="serviceLimit"
+            register={register}
+            errors={errors}
+            validate={{ required: "Trường này không được bỏ trống" }}
+            placeholder="Giới hạn hiển thị dịch vụ"
+            wrapClassanme="col-span-1"
+            label="Giới hạn dịch vụ hiển thị"
+            type="number"
           />
           <InputForm
             id="price"

@@ -29,3 +29,25 @@ export const apiGetSupplierById = (id) =>
         url: `guest/get/${id}`,
         method: "GET",
     })
+export const apiUnfollowSupplier = (id) =>
+    axios({
+        url: `user/unfollow-supplier/${id}`,
+        method: "POST"
+    })
+export const apifollowSupplier = (id) =>
+    axios({
+        url: `user/follow-supplier/${id}`,
+        method: "POST"
+    })
+
+export const apiCheckUserIsFollowingSupplier = (id) =>
+    axios({
+       url: `user/check-user-is-follow-supplier/${id}`,
+       method: "GET" 
+    })
+
+export const apiCheckTransactionServicePackageIsExpired = () =>
+    axios({
+        url: "supplier/transaction/is-expired",
+        method: "patch"
+    })

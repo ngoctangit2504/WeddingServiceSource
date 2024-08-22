@@ -9,11 +9,8 @@ export const generateRange = (start, end) => {
 }
 
 export const formatMoney = (number = 0) => {
-  // Convert to a number if it's not already
-  const num = parseFloat(number);
-  if (isNaN(num)) return '0';
-
-  return num.toFixed(1).toLocaleString();
+  if (!Number(number)) return 0
+  return Number(number?.toFixed(1)).toLocaleString()
 }
 
 export const customMoney = (number) => {

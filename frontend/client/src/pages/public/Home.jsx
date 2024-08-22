@@ -1,50 +1,50 @@
-import React, { useEffect, useState } from "react";
-import Header from "@/components/header/Header";
-import Navigation from "@/components/navigation/Navigation";
+import React, { useEffect, useState, useCallback } from "react";
 import Search from "@/components/search/Search";
 import CustomSlider from "@/components/common/CustomSlider";
 import Section from "@/components/common/Section";
 import { apiGetServiceByPackageVIP } from "@/apis/service";
 import ProvinceItem from "@/components/topProvince/ProvinceItem";
-import { apiGetServiceByDeleted, apiGetServiceByServiceType } from "@/apis/service";
+import { apiGetServiceByDeleted, apiGetServiceBySuggested, apiGetServiceByPackageVIP1AndVIP2 } from "@/apis/service";
+import { apiCheckTransactionServicePackageIsExpired } from "@/apis/supplier"
 import Card from "@/components/posts/Card";
 import { useDispatch, useSelector } from "react-redux"
 import { VideoPlayer } from "@/components";
-import Session from "redux-persist/lib/storage/session";
 import { ImageSlider } from "@/components";
-import { ServiceTypeGrid } from "@/components";
+import { ServiceTypeGrid, Pagination } from "@/components";
+import { useSearchParams } from "react-router-dom"
+
 
 
 const Home = () => {
     const dispatch = useDispatch()
     const [service, setSerivces] = useState()
+    const [serviceFollow, setServiceFollow] = useState()
     const [serviceVIP3, setServiceVIP3] = useState([])
-    const [serviceByType, setServiceByType] = useState()
+    const [serviceVIP1And2, setServiceVIP1And2] = useState([])
+    const [countServiceVIP1And2, setCountServiceVIP1And2] = useState(0)
+    const [serviceSuggested, setServiceSuggested] = useState([])
     const { wishlist } = useSelector((s) => s.user)
+    const [searchParams] = useSearchParams()
+    const [update, setUpdate] = useState(false)
+
+
+    const render = useCallback(() => {
+        setUpdate(!update)
+      }, [update])
 
     const fetchHomeData = async () => {
         const response = await apiGetServiceByDeleted({ size: 8 })
         if (response?.data) setSerivces(response.data)
     }
 
-    // const fetchServiceByVIP3Data = async () => {
-    //     const packageIds = [3, 2, 1]; // Danh sách các packageId
-    //     let response = null;
+    const fetchServicesVip1And2 = async (searchParamsObject) => {
+        const response = await apiGetServiceByPackageVIP1AndVIP2(searchParamsObject);
+        if(response.data){
+            setServiceVIP1And2(response.data)
+            setCountServiceVIP1And2(response.count)
+        }
+    }
 
-    //     for (const packageId of packageIds) {
-    //       response = await apiGetServiceByPackageVIP({ packageId, size: 30 });
-
-    //       if (response?.data && response.count > 0) {
-    //         setServiceVIP3(response.data);
-    //         break; // Dừng vòng lặp nếu có dữ liệu
-    //       }
-    //     }
-
-    //     // Nếu không có dữ liệu từ bất kỳ packageId nào, bạn có thể xử lý lỗi hoặc thông báo ở đây
-    //     if (!response?.data) {
-    //       console.error('No data found for any packageId');
-    //     }
-    //   };
     const fetchServiceByVIP3Data = async () => {
         const packageIds = [3, 2, 1]; // Danh sách các packageId
         let response = null;
@@ -67,7 +67,7 @@ const Home = () => {
                     }
                 }
 
-                // Xử lý dữ liệu cho VIP 2 và VIP 1
+                // Xử lý dữ liệu cho VIP 2
                 if (packageId === 2) {
                     if (response.count >= 5) {
                         // Nếu số lượng dữ liệu từ VIP 2 đủ lớn, kết hợp với dữ liệu từ VIP 3 nếu có
@@ -80,9 +80,10 @@ const Home = () => {
                     }
                 }
 
+                // Xử lý dữ liệu cho VIP 1
                 if (packageId === 1) {
                     // Kết hợp dữ liệu từ VIP 1 với các dữ liệu đã có
-                    allData = [...(dataVIP3 || []), ...response.data];
+                    allData = [...allData, ...response.data];
                     setServiceVIP3(allData);
                     return; // Dừng hàm sau khi đã xử lý gói VIP 1
                 }
@@ -95,18 +96,39 @@ const Home = () => {
         }
     };
 
-
-
-
-    const fetchServiceByTypeDate = async () => {
-        const response = await apiGetServiceByServiceType({ size: 8 })
-        if (response?.data) setServiceByType(response.data)
+    const fetchServiceBySuggested = async () => {
+        const response = await apiGetServiceBySuggested({ size: 8 })
+        if (response?.data) setServiceSuggested(response.data)
     }
+
+    const checkTransactionServicePackageIsExpired = async () => {
+        try {
+            const response = await apiCheckTransactionServicePackageIsExpired();
+            if (response.status === 200) {
+                console.log("Transaction package is valid.");
+            } else {
+                console.log("Transaction package has expired or not found.");
+            }
+        } catch (error) {
+            console.error("Error checking transaction service package:", error);
+        }
+    };
+
+    useEffect(() => {
+        const { page, ...searchParamsObject } = Object.fromEntries([
+            ...searchParams,
+        ])
+        if (page && Number(page)) searchParamsObject.page = Number(page) - 1
+        else searchParamsObject.page = 0
+        searchParamsObject.size = 8
+        fetchServicesVip1And2(searchParamsObject)
+    }, [update, searchParams])
 
 
     useEffect(() => {
         fetchHomeData()
-        fetchServiceByTypeDate()
+        fetchServiceBySuggested()
+        checkTransactionServicePackageIsExpired()
         fetchServiceByVIP3Data()
     }, [])
 
@@ -124,21 +146,22 @@ const Home = () => {
             <div className="bg-pink-100">
                 <Section
                     className="w-main mx-auto text-neutral-400"
-                    title="BÀI VIẾT NỔI BẬT"
+                    title="DỊCH VỤ NỔI BẬT"
                 >
                     <CustomSlider count={4}>
                         {serviceVIP3.map((el, idx) => (
                             <ProvinceItem key={idx} {...el} />
                         ))}
                     </CustomSlider>
+
                 </Section>
             </div>
             <Section
                 className="w-main mx-auto text-neutral-400"
-                title="Nhà Cung Cấp"
+                title="Gợi ý dành riêng cho bạn"
                 contentClassName="grid grid-cols-4 gap-4"
             >
-                {service?.map((el) => (
+                {serviceSuggested?.map((el) => (
                     <Card
                         isLike={wishlist?.some((n) => n.id === el.id)}
                         {...el}
@@ -153,6 +176,32 @@ const Home = () => {
             >
                 <div>
                     <ImageSlider images={images} />
+                </div>
+            </Section>
+
+
+            {/* Dịch vụ khác */}
+            <Section
+                className="w-main mx-auto text-neutral-400"
+                title="Dịch vụ khác"
+                contentClassName="grid grid-cols-1 gap-4"
+            >
+                <div className="grid grid-cols-4 gap-4 mt-6 w-full">
+                    {serviceVIP1And2?.map((el) => (
+                        <Card
+                            isLike={wishlist?.some((n) => n.id === el.id)}
+                            id={el.id}
+                            image={el.image}
+                            title={el.title}
+                            address={el.address}
+                            createdDate={el.createdDate}
+                            key={el.id}
+                        />
+                    ))}
+                </div>
+
+                <div className="mt-6 col-span-4">
+                    <Pagination totalCount={countServiceVIP1And2 || 1} />
                 </div>
             </Section>
 

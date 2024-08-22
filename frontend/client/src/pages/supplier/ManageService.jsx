@@ -9,17 +9,18 @@ import { AiFillDelete, AiFillStar, AiOutlineEdit } from "react-icons/ai"
 import { Link, useSearchParams } from "react-router-dom"
 import { toast } from "react-toastify"
 import Swal from "sweetalert2"
-// import UpdatePost from "./UpdatePost"
+import UpdateService from "./UpdateService"
 import useDebounce from "@/hooks/useDebounce"
 import { useSelector } from "react-redux"
 import clsx from "clsx"
-import { apiDeleteService, apiGetServiceBySupplier, apiGetServices } from "@/apis/service"
+import { apiDeleteService, apiGetServiceBySupplier, apiGetServices, apiUpdateServiceSelected } from "@/apis/service"
 import path from "@/ultils/path"
 import { stars, statuses } from "@/ultils/constant"
 import { apiCheckSupplierExited } from "@/apis/supplier"
 
+
 const ManageService = ({ dispatch, navigate }) => {
-  const { setValue, watch } = useForm()
+  const { setValue, watch, register, errors } = useForm()
   const { current } = useSelector((s) => s.user)
   const { isShowModal } = useSelector((s) => s.app)
   const keyword = watch("keyword")
@@ -27,6 +28,10 @@ const ManageService = ({ dispatch, navigate }) => {
   const [posts, setPosts] = useState([])
   const [searchParams] = useSearchParams()
   const [update, setUpdate] = useState(false)
+
+  // Kiểm tra xem nhà cung cấp đã đăng ký gói VIP chưa
+  const hasVipPackage = current?.servicePackageUsed;
+
   const fetchPosts = async (params) => {
     const response = await apiGetServices(params)
     if (response) setPosts(response)
@@ -92,6 +97,28 @@ const ManageService = ({ dispatch, navigate }) => {
       console.error("Failed to check supplier status:", error);
     }
   }
+  const handleSelectService = async (serviceId) => {
+    Swal.fire({
+      icon: "warning",
+      title: "Xác nhận thao tác",
+      text: "Bạn có chắc muốn chọn bài đăng này?",
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: "Cập nhật",
+      cancelButtonText: "Quay lại",
+    }).then(async (rs) => {
+      if (rs.isConfirmed) {
+        // Gọi API để cập nhật trạng thái selected của dịch vụ
+        const response = await apiUpdateServiceSelected(serviceId);
+        if (response.success) {
+          render();
+          toast.success(response.message);
+        } else {
+          toast.error(response.message);
+        }
+      }
+    })
+  }
   return (
     <section className="mb-[200px]">
       <Title title="Quản lý Dịch Vụ">
@@ -139,7 +166,7 @@ const ManageService = ({ dispatch, navigate }) => {
                   Ảnh đại diện
                 </th>
                 <th className="p-2 border font-medium text-center">Tiêu đề</th>
-                <th className="p-2 border font-medium text-center">Giá</th>
+                <th className="p-2 border font-medium text-center">Địa chỉ</th>
                 <th className="p-2 border font-medium text-center">
                   Ngày tạo mới
                 </th>
@@ -149,6 +176,11 @@ const ManageService = ({ dispatch, navigate }) => {
                 <th className="p-2 border font-medium text-center">
                   Trạng thái
                 </th>
+                {hasVipPackage && (
+                  <th className="p-2 border font-medium text-center">
+                    Dịch vụ hiển thị
+                  </th>
+                )}
                 <th className="p-2 border bg-pink-500 text-white font-medium text-center">
                   Hành động
                 </th>
@@ -177,7 +209,7 @@ const ManageService = ({ dispatch, navigate }) => {
                     </a>
                   </td>
                   <td className="p-2 text-center">
-                    {formatMoney(el.price) + " VNĐ"}
+                    {el.address}
                   </td>
                   <td className="p-2 text-center">
                     {moment(el.createdDate).format("DD/MM/YYYY")}
@@ -188,6 +220,16 @@ const ManageService = ({ dispatch, navigate }) => {
                   <td className="p-2 text-center">
                     {statuses.find((n) => n.value === el.status)?.name}
                   </td>
+                  {hasVipPackage && (
+                    <td className="p-2 text-center">
+                      <input
+                        type="checkbox"
+                        name="selectedService"
+                        checked={el.selected}
+                        onChange={() => handleSelectService(el.id)}
+                      />
+                    </td>
+                  )}
                   <td className="p-2">
                     <span className="flex w-full justify-center text-emerald-700 items-center gap-2">
                       <span
@@ -195,7 +237,7 @@ const ManageService = ({ dispatch, navigate }) => {
                           dispatch(
                             modal({
                               isShowModal: true,
-                              modalContent: <UpdatePost postId={el.id} />,
+                              modalContent: <UpdateService serviceId={el.id} />,
                             })
                           )
                         }

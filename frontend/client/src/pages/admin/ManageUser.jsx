@@ -150,7 +150,7 @@ const ManageUser = ({ dispatch }) => {
         <div className="mt-6 w-full">
           <table className="table-auto w-full">
             <thead>
-              <tr className="border">
+              <tr className="border text-pink-500">
                 <th className="p-2 border font-medium text-center">User ID</th>
                 <th className="p-2 border font-medium text-center">Aavatar</th>
                 <th className="p-2 border font-medium text-center">
@@ -207,7 +207,7 @@ const ManageUser = ({ dispatch }) => {
                   </td>
                   <td className="flex items-center justify-center gap-2 p-2">
                     <span
-                      onClick={() => handleDeleteUser(el.userId)}
+                      onClick={() => handleDeleteUser(el.customerId)}
                       className="text-lg text-main-red cursor-pointer px-1"
                     >
                       <AiFillDelete />

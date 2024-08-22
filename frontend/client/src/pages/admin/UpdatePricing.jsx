@@ -20,6 +20,7 @@ const UpdatePricing = ({ editPricing, dispatch, render }) => {
         durationDays: editPricing?.durationDays,
         price: editPricing?.price,
         description: editPricing?.description,
+        serviceLimit: editPricing?.serviceLimit,
       })
     }
   }, [editPricing])
@@ -48,7 +49,7 @@ const UpdatePricing = ({ editPricing, dispatch, render }) => {
               errors={errors}
               validate={{ required: "Trường này không được bỏ trống" }}
               placeholder="Nhập tên dịch vụ"
-              wrapClassanme="col-span-2"
+              wrapClassanme="col-span-1"
               label="Tên dịch vụ"
             />
             <InputForm
@@ -61,6 +62,16 @@ const UpdatePricing = ({ editPricing, dispatch, render }) => {
               label="Số ngày áp dụng"
               type="number"
               readOnly
+            />
+            <InputForm
+              id="serviceLimit"
+              register={register}
+              errors={errors}
+              validate={{ required: "Trường này không được bỏ trống" }}
+              placeholder="Giới hạn hiển thị dịch vụ"
+              wrapClassanme="col-span-1"
+              label="Giới hạn dịch vụ hiển thị"
+              type="number"
             />
             <InputForm
               id="price"

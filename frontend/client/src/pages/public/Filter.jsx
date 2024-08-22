@@ -197,7 +197,7 @@ const Filter = ({ location, navigate, dispatch }) => {
                         <div className="w-full flex gap-3 justify-end items-center">
                             <Button
                                 onClick={() => handleFilterRange("ADDRESS", address)}
-                                className="py-1 bg-transparent border border-emerald-600 text-emerald-600"
+                                className="py-1 bg-transparent border border-pink-600 text-white"
                             >
                                 Thêm
                             </Button>

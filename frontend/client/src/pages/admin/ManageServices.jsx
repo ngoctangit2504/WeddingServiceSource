@@ -12,12 +12,6 @@ import Swal from "sweetalert2"
 import useDebounce from "@/hooks/useDebounce"
 import { useSelector } from "react-redux"
 import clsx from "clsx"
-// import {
-//   apiDeletePost,
-//   apiGetPosts,
-//   apiUpdateApprovedPost,
-//   apiUpdateRejectedPost,
-// } from "@/apis/post"
 
 import { apiDeleteService, apiGetServices, apiUpdateRejectedService, apiUpdateApprovedService } from "@/apis/service"
 import path from "@/ultils/path"
@@ -118,11 +112,6 @@ const ManageServices = ({ dispatch, navigate }) => {
               Hủy
             </Button>
           )}
-          <Button
-            onClick={() => navigate(`/${path.SUPPLIER}/${path.CREATE_SERVICE}`)}
-          >
-            Đăng tin mới
-          </Button>
         </div>
       </Title>
       <div className="p-4 mt-4">
@@ -149,7 +138,7 @@ const ManageServices = ({ dispatch, navigate }) => {
         <div className="mt-6 w-full">
           <table className="table-fixed w-full">
             <thead>
-              <tr>
+              <tr className="text-pink-500">
                 <th className="p-2 border font-medium text-center">Mã tin</th>
                 <th className="p-2 border font-medium text-center">
                   Ảnh đại diện

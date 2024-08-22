@@ -6,6 +6,8 @@ import { GoLocation } from "react-icons/go"
 import { BsPhoneVibrate } from "react-icons/bs"
 import { createSearchParams, useParams } from "react-router-dom"
 import Swal from "sweetalert2"
+import { FaPhoneSquareAlt } from "react-icons/fa";
+import { FiHome } from "react-icons/fi";
 
 
 // import { apiGetDetailPost, apiGetPosts, apiGetRatings } from "@/apis/post"
@@ -195,14 +197,14 @@ const DetailPost = ({ navigate, location, dispatch }) => {
               <Button
                 onClick={() => navigate(SUPPLIER_DETAIL_PATH)}
                 className="mt-2 bg-blue-500 text-white px-3 py-1 rounded"
-              >
+              ><FiHome/>
                 Xem Trang
               </Button>
             </div>
           </div>
           <div className="mt-6">
             <div className="flex items-center">
-              <GoLocation className="text-gray-400 mr-3" />
+              <FaPhoneSquareAlt className="text-gray-400 mr-3" />
               <p className="text-base text-gray-600">{post?.phoneNumberSupplier}</p>
             </div>
 

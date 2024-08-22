@@ -22,7 +22,6 @@ import { toast } from "react-toastify"
 import { getBase64 } from "@/ultils/fn"
 import path from "@/ultils/path"
 import { ImBin } from "react-icons/im"
-import { stringify } from "postcss"
 
 const CreateService = ({ navigate }) => {
     const {

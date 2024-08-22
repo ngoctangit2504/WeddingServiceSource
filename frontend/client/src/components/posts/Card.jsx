@@ -11,7 +11,8 @@ import { toast } from "react-toastify"
 import { Button } from ".."
 import { modal } from "@/redux/appSlice"
 import { Booking } from ".."
-import { MdForwardToInbox  } from "react-icons/md"
+import { MdForwardToInbox } from "react-icons/md"
+import { renderStarFromNumber } from "@/ultils/fn"
 
 
 
@@ -19,11 +20,11 @@ const Card = ({
   image,
   title,
   address,
-  price,
   createdDate,
   id,
   isLike,
   wishListItemId,
+  averageRating,
 }) => {
   const dispatch = useDispatch()
   const { current, wishlist } = useSelector((s) => s.user)
@@ -76,6 +77,11 @@ const Card = ({
           {title}
         </Link>
         <span className="text-sm text-gray-500">{address}</span>
+        <span className="flex items-center">
+          {renderStarFromNumber(averageRating)?.map((item, index) => (
+            <span key={index}>{item}</span>
+          ))}
+        </span>
         <div className="mt-3 flex justify-between items-center">
           <Button
             onClick={() =>

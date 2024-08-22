@@ -40,10 +40,13 @@ const ManagePayment = () => {
         <div className="mt-6 w-full">
           <table className="table-auto w-full">
             <thead>
-              <tr>
+              <tr className="text-pink-500">
                 <th className="p-2 border font-medium text-center">Mã Giao Dịch</th>
                 <th className="p-2 border font-medium text-center">
-                  SDT Người Mua
+                  Tên nhà cung cấp
+                </th>
+                <th className="p-2 border font-medium text-center">
+                  SDT nhà cung cấp
                 </th>
                 <th className="p-2 border font-medium text-center">
                   Gói Dịch Vụ
@@ -64,8 +67,8 @@ const ManagePayment = () => {
               {transactions?.map((el) => (
                 <tr className="border" key={el.transactionId}>
                   <td className="p-2 text-center">{el.transactionId}</td>
-                  <td className="p-2 text-center">{el.partUser?.phoneNumber}</td>
-
+                  <td className="p-2 text-center">{el.partSupplier?.userName}</td>
+                  <td className="p-2 text-center">{el.partSupplier?.phoneNumber}</td>
                   <td className="p-2 text-center">
                     {el.partServicePackage?.servicePackageName}
                   </td>

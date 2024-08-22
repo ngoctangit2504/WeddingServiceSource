@@ -36,6 +36,7 @@ const ManagePricing = ({ dispatch }) => {
     searchParamsObject.limit = 5
     fetchPricings(searchParamsObject)
   }, [update, searchParams])
+  
   const handleDeletePricing = (id) => {
     Swal.fire({
       icon: "warning",
@@ -70,10 +71,11 @@ const ManagePricing = ({ dispatch }) => {
         <div className="mt-6 w-full">
           <table className="table-auto w-full">
             <thead>
-              <tr className="border text-emerald-700">
+              <tr className="border text-pink-500">
                 <th className="p-2  border text-center">ID</th>
                 <th className="p-2  border text-center">Tên dịch vụ</th>
                 <th className="p-2  border text-center">Số ngày áp dụng</th>
+                <th className="p-2  border text-center">Giới hạn bài viết</th>
                 <th className="p-2  border text-center">Giá</th>
                 <th className="p-2  border text-center">Ngày tạo</th>
                 <th className="p-2  border text-center">Hành động</th>
@@ -85,6 +87,7 @@ const ManagePricing = ({ dispatch }) => {
                   <td className="p-2 text-center">{el.servicePackageId}</td>
                   <td className="p-2 text-center">{el.name}</td>
                   <td className="p-2 text-center">{el.durationDays}</td>
+                  <td className="p-2 text-center">{el.serviceLimit}</td>
                   <td className="p-2 text-center">{el.price}</td>
                   <td className="p-2 text-center">
                     {moment(el.createdDate).format("DD/MM/YYYY")}

@@ -31,6 +31,12 @@ export const apiGetServiceByServiceType = (params) =>
         method: "GET",
         params,
     })
+export const apiGetServiceBySuggested = (params) =>
+    axios({
+        url: "/service/suggest-by-follow-or-not",
+        method: "GET",
+        params,
+    })
 export const apiGetDetailService = (params) => {
     return axios({
         url: "/service/detail-service",
@@ -59,6 +65,14 @@ export const apiGetServiceByPackageVIP = (params) => {
         url: "/guest/service/services-by-package-vip",
         method: "GET",
         params
+    })
+}
+
+export const apiGetServiceByPackageVIP1AndVIP2 = (params) => {
+    return axios({
+        url: "/guest/service/services-by-package-VIP1-VIP2",
+        method: "GET",
+        params,
     })
 }
 
@@ -112,4 +126,16 @@ export const apiUpdateRejectedService = (params) =>
         url: "/admin/setIsRejectedService",
         method: "patch",
         params,
+    })
+export const apiUpdateStatusBooking = (params) =>
+    axios({
+        url: "/booking-service/change/status-booking",
+        method: "patch",
+        params,
+    })
+
+export const apiUpdateServiceSelected = (serviceId) =>
+    axios({
+        url: `/service/update/service-selected/${serviceId}`,
+        method: "patch",
     })

@@ -57,7 +57,7 @@ const ManageReport = () => {
         <div className="mt-6 w-full">
           <table className="table-auto w-full">
             <thead>
-              <tr className="border text-pink-700">
+              <tr className="border text-pink-500">
                 <th className="p-2  border text-center">ID</th>
                 <th className="p-2  border text-center">Tên người report</th>
                 <th className="p-2  border text-center">Số điện thoại</th>
